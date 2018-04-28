@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>entity</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/mapper/${subModuleName}</filePath>
+	<fileName>${ClassName}Mapper.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href=" ">harry12800</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>;
+
+import ${packageName}.${moduleName}.entity.${ClassName};
+<#list importList as i>
+import ${i};
+</#list>
+/**
+ * ${functionName}Mapper
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ <#list classDescList as c>
+ * <dt>${c}
+ </#list>
+ */
+
+public interface ${ClassName}Mapper extends CrudDao<${ClassName}> {
+	static final long serialVersionUID = 1L;
+	
+}]]>
+	</content>
+</template>
