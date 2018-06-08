@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packageName}/${moduleName}/view/${subModuleName}</filePath>
+	<fileName>${ClassName}View.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.view<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+ 
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Service;
+import cn.harry12800.j2se.table.DisplayPanel;
+import com.gznytm.config.SysConfig;
+/**
+ * ${functionName}Service
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Component
+@Transactional(readOnly = true)
+public class ${ClassName}View  extends DisplayPanel<${ClassName}> {
+ 	private static final long serialVersionUID = 1L;
+	${ClassName}Service service;
+	public ${ClassName}View() {
+		super(${ClassName}.class);
+	}
+	@Override
+	protected void initMeta(cn.harry12800.j2se.table.DisplayPanel.Meta meta) {
+		service = SysConfig.instance.getBean(${ClassName}Service.class);
+	}
+	@Override
+	public List<java.awt.Component> getWorkComp() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public int saveData(TButton t) {
+		return service.save(t);
+	}
+	@Override
+	public int updateData(TButton t) {
+		return service.update(t);
+	}
+	@Override
+	public List<TButton> getSearchData(TButton t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public void validateData(TButton t) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public List<TButton> executeQuery(String sql) {
+		return service.findBySql(sql);
+	}
+	@Override
+	public int deleteData() {
+		if(unSelectTable()) return 0;
+		service.deleteByIds(getTableSelectMamaId());
+		refresh();
+		return 0;
+	}
+	@Override
+	public int executeQueryCount(String mysqlPageContent) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+}]]>
+	</content>
+</template>
