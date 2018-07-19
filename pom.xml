@@ -27,6 +27,11 @@
             <artifactId>harry12800.tools</artifactId>
             <version>1.0</version>
         </dependency>
+         <dependency>
+            <groupId>cn.harry12800</groupId>
+            <artifactId>harry12800.dbhelper</artifactId>
+            <version>1.0</version>
+        </dependency>
         <dependency>
             <groupId>cn.harry12800</groupId>
             <artifactId>harry12800.tree2word</artifactId>

@@ -753,9 +753,10 @@ public class DeveloperUtils {
 				String mapperpackageNamePath =null;
 				if(mapperPackageName!=null)
 					mapperpackageNamePath = mapperPackageName.replaceAll("[.]", "/");
-				String string= System.getProperty("user.dir") + "/src/"
+				String string= System.getProperty("user.dir") + "/src/main/java/"
 				+ packageNamePath + "/" + clazzName + ".java";
 				System.out.println(string);
+				FileUtils.createFile(string);
 				FileUtils.writeContent(string,
 						content.toString());
 				/**
@@ -905,8 +906,10 @@ public class DeveloperUtils {
 		}
 		mybatis.append("\t</resultMap>\r\n");
 		mybatis.append("</mapper>");
-		FileUtils.writeContent(System.getProperty("user.dir") + "/src/"
-				+ mapperpackageNamePath + "/" + clazzName + "Mapper.xml",
+		String mapperPath = System.getProperty("user.dir") + "/src/main/resources/mapper/"
+		+ mapperpackageNamePath + "/" + clazzName + "Mapper.xml";
+		FileUtils.createFile(mapperPath);
+		FileUtils.writeContent(mapperPath,
 				mybatis.toString());
 	}
 	private static void addFindBySql(StringBuilder mybatis, DBTable table,
@@ -978,9 +981,10 @@ public class DeveloperUtils {
 		mapper.append("\tpublic int update("+clazzName+" t);\r\n");
 		mapper.append("\tpublic List<"+clazzName+"> findBySql(String sql);\r\n");
 		mapper.append("\tpublic int deleteByIds(String ids);\r\n}");
-		FileUtils.writeContent(System.getProperty("user.dir") + "/src/"
-				+ mapperpackageNamePath + "/" + clazzName + "Mapper.java",
-				mapper.toString());
+		String mapperPath = System.getProperty("user.dir") + "/src/main/java/"
+		+ mapperpackageNamePath + "/" + clazzName + "Mapper.java";
+		FileUtils.createFile(mapperPath);
+		FileUtils.writeContent(mapperPath, mapper.toString());
 	}
 	/**
 	 * 针对mybatis字段名与属性名对不上的情况下。
