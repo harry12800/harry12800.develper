@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>service</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/view/${subModuleName}</filePath>
+	<filePath>src/main/java/${packagePath}/${moduleName}/view/${subModuleName}</filePath>
 	<fileName>${ClassName}View.java</fileName>
 	<content><![CDATA[/**
  * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.

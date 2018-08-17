@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>entity</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/entity/${subModuleName}</filePath>
+	<filePath>src/main/java/${packagePath}/${moduleName}/entity/${subModuleName}</filePath>
 	<fileName>${ClassName}.java</fileName>
 	<content><![CDATA[/**
  * Copyright &copy; 2015-2020 <a href=" ">harry12800</a> All rights reserved.
@@ -11,10 +11,10 @@ package ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModule
 <#list importList as i>
 import ${i};
 </#list>
-import cn.harry12800.tools.DbField;
-import cn.harry12800.tools.DbInitSentence;
-import cn.harry12800.tools.DbInitType;
-import cn.harry12800.tools.DbTable;
+//import cn.harry12800.tools.DbField;
+//import cn.harry12800.tools.DbInitSentence;
+//import cn.harry12800.tools.DbInitType;
+//import cn.harry12800.tools.DbTable;
 /**
  * ${functionName}Entity
  * @author ${functionAuthor}
@@ -23,20 +23,20 @@ import cn.harry12800.tools.DbTable;
  * <dt>${c}
  </#list>
  */
-@DbTable(tableName = "${table.dbName}")
+//@DbTable(tableName = "${table.dbName}")
 public class ${ClassName} { // extends DataEntity<${ClassName}> {
-	private static final long serialVersionUID = 1L;
+//	private static final long serialVersionUID = 1L;
 	
 	<#list table.fields as c>
 	/**
 	 * ${c.comments}
 	 */
-	${c.tableFieldAnno}
+//	${c.tableFieldAnno}
  	private ${c.javaType}	${c.javaName};
 	</#list>
-	@DbInitSentence(type = DbInitType.Create)
+//	@DbInitSentence(type = DbInitType.Create)
 	public static String initSql="${table.createSql}";
-	@DbInitSentence(type = DbInitType.Create)
+//	@DbInitSentence(type = DbInitType.Create)
 	public static String initOracleSql="${table.createOracleSql}";
 	<#list table.fields as c>
 	/**

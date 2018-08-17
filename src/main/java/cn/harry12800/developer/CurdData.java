@@ -16,6 +16,7 @@ public class CurdData {
 	public String fileName="";
 	public String content="";
 	
+	public String packagePath="";
 	public String packageName="";
 	public String moduleName="";
 	public String subModuleName="";
@@ -50,6 +51,7 @@ public class CurdData {
 		newHashMap.put("fileName", fileName);
 		newHashMap.put("content", content);
 		newHashMap.put("packageName", packageName);
+		newHashMap.put("packagePath", packagePath);
 		newHashMap.put("moduleName", moduleName);
 		newHashMap.put("subModuleName", subModuleName);
 		newHashMap.put("ClassName", ClassName);

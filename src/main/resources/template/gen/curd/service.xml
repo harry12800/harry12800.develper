@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>service</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/service/${subModuleName}</filePath>
+	<filePath>src/main/java/${packagePath}/${moduleName}/service/${subModuleName}</filePath>
 	<fileName>${ClassName}Service.java</fileName>
 	<content><![CDATA[/**
  * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+//import org.springframework.transaction.annotation.Transactional;
  
 import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
 import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Mapper;
@@ -23,7 +23,7 @@ import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleN
  * @version ${functionVersion}
  */
 @Component
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
 
 	@Autowired
@@ -46,6 +46,9 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	}
 	public int deleteByIds(String ids){
 		return mapper.deleteByIds(ids);
+	}
+	public int deleteById(String id){
+		return mapper.deleteById(id);
 	}
 }]]>
 	</content>

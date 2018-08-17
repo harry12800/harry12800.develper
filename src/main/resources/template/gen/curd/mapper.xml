@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template>
 	<name>entity</name>
-	<filePath>src/main/java/${packageName}/${moduleName}/mapper/${subModuleName}</filePath>
+	<filePath>src/main/java/${packagePath}/${moduleName}/mapper/${subModuleName}</filePath>
 	<fileName>${ClassName}Mapper.java</fileName>
 	<content><![CDATA[/**
  * Copyright &copy; 2015-2020 <a href=" ">harry12800</a> All rights reserved.
  */
 package ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>;
 
+import java.util.List;
 import ${packageName}.${moduleName}.entity.${ClassName};
 <#list importList as i>
 import ${i};
@@ -21,8 +22,46 @@ import ${i};
  </#list>
  */
 
-public interface ${ClassName}Mapper extends CrudDao<${ClassName}> {
+public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	static final long serialVersionUID = 1L;
+	
+	/**
+	* 通过多个id删除多行数据
+	* 字符串ids的样子 eg:  `id in ('a','b')`
+	**/
+	int deleteByIds(String ids);
+	
+	/**
+	* 删除单行数据
+	*/
+	int deleteById(String id);
+
+	/**
+	 * 查找一行数据
+	 * @param id
+	 * @return
+	 */
+	${ClassName} findById(String id);
+
+	/**
+	* 删除多行数据
+	**/
+	List<${ClassName}> findAll();
+
+	/**
+	* 保存数据
+	*/
+	int save(${ClassName} t);
+
+	/**
+	* 更新数据，通过id 修改所有字段属性
+	*/
+	int update(${ClassName} t);
+	
+	/**
+	* 自定义sql语句查询列表
+	*/
+	List<${ClassName}> findBySql(String sql);
 	
 }]]>
 	</content>

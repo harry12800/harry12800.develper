@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packagePath}/${moduleName}/controller/${subModuleName}</filePath>
+	<fileName>${ClassName}Controller.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href="http://www.jeeplus.org/">JeePlus</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.controller<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.hnlens.doc.http.ResponseEntity;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Mapper;
+
+/**
+ * ${functionName}Controller
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+//@Transactional(readOnly = true)
+@RestController
+@RequestMapping("/v1/${moduleName}/${subModuleName}")
+public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
+
+	private static final String API_TAGS = "${dbDesc}/Controller";
+
+	@Autowired
+	${ClassName}Mapper mapper;
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "添加", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity add(@ApiParam @RequestParam ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.save(${className});
+			r.setContent(new Object() {
+				public int result = save;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+
+	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "删除", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity delete(@ApiParam @RequestParam ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.deleteById("");
+			r.setContent(new Object() {
+				public int result = save;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+
+	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "update", value = "修改", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity update(@ApiParam @RequestParam ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.update(${className});
+			r.setContent(new Object() {
+				public int result = save;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+
+	@RequestMapping(value = "/findById", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "findById", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity findById(@ApiParam @RequestParam ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			${ClassName} findById = mapper.findById("");
+			r.setContent(new Object() {
+				public ${ClassName} ${className} = findById;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+
+	@RequestMapping(value = "/findAll", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "findAll", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity findAll(@ApiParam @RequestParam ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			List<${ClassName}> findAll = mapper.findAll();
+			r.setContent(new Object() {
+				public List<${ClassName}> lists = findAll;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+}]]>
+	</content>
+</template>

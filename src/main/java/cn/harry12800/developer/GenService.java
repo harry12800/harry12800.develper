@@ -55,6 +55,7 @@ public class GenService {
 			}
 		}
 		System.out.println(template);
+		FileUtils.createFile(DeveloperUtils.projectPath+File.separator+template.filePath+template.fileName);
 		FileUtils.writeContent(DeveloperUtils.projectPath+File.separator+template.filePath+template.fileName, template.content);
 		System.out.println(DeveloperUtils.projectPath+File.separator+template.filePath+template.fileName);
 	}

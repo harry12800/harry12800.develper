@@ -15,11 +15,12 @@ import org.xml.sax.InputSource;
 import cn.harry12800.tools.FileUtils;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
-@SuppressWarnings("deprecation")
-public class GenMybatisXml {
 
-	public final static String ftl = "mapperxml.xml";
+public class GenController {
+
+	public final static String ftl = "controller.xml";
 	public   static boolean jarOrFile = true; 
+	@SuppressWarnings("deprecation")
 	public static void gen(CurdData curdData) throws Exception  {
 		
 		Configuration cfg=Configuration.getDefaultConfiguration();

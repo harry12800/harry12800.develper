@@ -15,7 +15,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 ${"$"}{value}
 	</select>
 	<select id='findAll' resultMap='${ClassName}' >
-		select <#list table.fields as c><#if c_has_next>${c.dbName},</#if><#if c_has_next>${c.dbName}</#if></#list> from ${table.dbName}
+		select <#list table.fields as c><#if c_has_next>${c.dbName},</#if> <#if !c_has_next>${c.dbName}</#if></#list> from ${table.dbName}
 	</select>
 	<insert id='save' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		insert into ${table.dbName}(
@@ -30,6 +30,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 <#if !c_has_next>${c.dbName}=${"#"}{${c.javaName}}</#if></#list>
 		 where id=${"#"}{id}
 	</update>
+	<delete id='deleteById' parameterType='java.lang.String'>
+		delete from ${table.dbName} where  id = ${"#"}{value}
+	</delete>
 	<delete id='deleteByIds' parameterType='java.lang.String'>
 		delete from ${table.dbName} where  ${"#"}{value}
 	</delete>

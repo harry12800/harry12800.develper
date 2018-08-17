@@ -41,32 +41,34 @@ import cn.harry12800.tools.XmlUtils;
 public class DeveloperUtils {
 	public static void main1(String[] args) throws Exception {
 		//DeveloperUtils.clearAnnotation("F:/Workspaces/pssm/src");
-//		String url = "jdbc:mysql://127.0.0.1:3306/nytm";
-//		String user = "root";
-//		String password = "admin";
+		//		String url = "jdbc:mysql://127.0.0.1:3306/nytm";
+		//		String user = "root";
+		//		String password = "admin";
 		String url = "jdbc:oracle:thin:@192.168.10.110:1521:orcl";
 		String user = "nytm";
 		String password = "nytm";
 		List<DBTable> dbTable = DeveloperUtils.getDBTable(url, user, password);
-		for (  DBTable table  : dbTable) {
+		for (DBTable table : dbTable) {
 			System.out.println(table.getCreateDDL(DBType.MYSQL));
-		//	System.out.println(table.getCreateCommentDDL(DBType.MYSQL));
+			//	System.out.println(table.getCreateCommentDDL(DBType.MYSQL));
 		}
 	}
+
 	/**
 	 * @throws Exception 
 	 */
-	public static List<DBTable> getDBTable(String url,String userName,String pwd) throws Exception {
-		OracleHelper oracleHelper= new OracleHelper();
-		MysqlHelper mysqlHelper= new MysqlHelper();
+	public static List<DBTable> getDBTable(String url, String userName, String pwd) throws Exception {
+		OracleHelper oracleHelper = new OracleHelper();
+		MysqlHelper mysqlHelper = new MysqlHelper();
 		List<DBTable> tableDetail = null;
-		if(url.contains("mysql")){
-			 tableDetail = mysqlHelper.getTableDetail(url,userName,pwd);
-		}else{
-			 tableDetail = oracleHelper.getTableDetail(url,userName,pwd);
+		if (url.contains("mysql")) {
+			tableDetail = mysqlHelper.getTableDetail(url, userName, pwd);
+		} else {
+			tableDetail = oracleHelper.getTableDetail(url, userName, pwd);
 		}
 		return tableDetail;
 	}
+
 	/**
 	 * 作者名称
 	 */
@@ -84,6 +86,7 @@ public class DeveloperUtils {
 	public static String getProjectName() {
 		return projectName;
 	}
+
 	/**
 	 * 获得项目的输出路径
 	 * @param projectPath 项目路径
@@ -103,6 +106,7 @@ public class DeveloperUtils {
 		}
 		throw new Exception("未找到项目的输出路径");
 	}
+
 	/**
 	 * 将class文件移动到指定位置，按照class文件包的path路径层次
 	 * 
@@ -362,7 +366,7 @@ public class DeveloperUtils {
 					if (fi.getName().endsWith(".java")) {
 						String content = FileUtils.getSrcByFilePath(fi
 								.getAbsolutePath());
-						if(content.contains("native")) {
+						if (content.contains("native")) {
 							System.out.println(fi.getName());
 							continue;
 						}
@@ -503,8 +507,7 @@ public class DeveloperUtils {
 	 *            java文件的字符串内容
 	 * @return
 	 */
-	private static String getClassNameBySrc(String javaCode
-			) {
+	private static String getClassNameBySrc(String javaCode) {
 		Pattern p = Pattern.compile("package(.*?);");
 		Matcher m = p.matcher(javaCode);
 		if (m.find()) {
@@ -612,13 +615,62 @@ public class DeveloperUtils {
 		str.append(" */\r\n");
 		return str;
 	}
-	public static void main(String[] args) throws Exception {
-		String url="jdbc:mysql://127.0.0.1:3306/nytm";
-		String user="root";
-		String pwd="admin";
-		String tableName="Person_Application";
-		DeveloperUtils.generateDbEntityByTableName( url, user, pwd, tableName);
-}
+	public static Builder createBuilder(){
+		return new Builder();
+	}
+	public static class Builder {
+		String basePackage;
+		String moduleName;
+		String url;
+		String user;
+		String pwd;
+		String tableName;
+
+		
+		public Builder setBasePackage(String basePackage) {
+			this.basePackage = basePackage;
+			return this;
+		}
+
+
+		public Builder setModuleName(String moduleName) {
+			this.moduleName = moduleName;
+			return this;
+		}
+
+
+		public Builder setUrl(String url) {
+			this.url = url;
+			return this;
+		}
+
+
+		public Builder setUser(String user) {
+			this.user = user;
+			return this;
+		}
+
+
+		public Builder setPwd(String pwd) {
+			this.pwd = pwd;
+			return this;
+		}
+
+
+		public Builder setTableName(String tableName) {
+			this.tableName = tableName;
+			return this;
+		}
+
+
+		public void build() {
+			String[] split = tableName.split(",");
+			for (String string : split) {
+				generateDbEntityByTableNameUseFreemarker(basePackage, moduleName, url, user, pwd, string);
+			}
+		}
+	}
+
 	/**
 	 * 根据模板生成java文件。entity，dao，service，web。mapper.xml;
 	 * @param url
@@ -626,8 +678,12 @@ public class DeveloperUtils {
 	 * @param pwd
 	 * @param tableName
 	 */
-	public static void generateDbEntityByTableName(String url, String user,
-			String pwd, String tableName) {
+	public static void generateDbEntityByTableNameUseFreemarker(String basePackage,
+			String moduleName,
+			String url,
+			String user,
+			String pwd,
+			String tableName) {
 		Db db;
 		if (url.contains("mysql")) {
 			db = new MysqlHelper();
@@ -639,12 +695,16 @@ public class DeveloperUtils {
 			for (DBTable table : tableDetail) {
 				if (!table.getName().equalsIgnoreCase(tableName))
 					continue;
-				CurdData curdData= createCurdData(table);
+				CurdData curdData = createCurdData(table);
+				curdData.packageName = basePackage;
+				curdData.packagePath = basePackage.replaceAll("[.]", "/");
+				curdData.moduleName = moduleName;
 				curdData.classDescList.add(url);
 				curdData.classDescList.add(user);
 				curdData.classDescList.add(pwd);
 				GenEntity.gen(curdData);
 				GenDao.gen(curdData);
+				GenController.gen(curdData);
 				GenService.gen(curdData);
 				GenMybatisXml.gen(curdData);
 				GenView.gen(curdData);
@@ -658,123 +718,16 @@ public class DeveloperUtils {
 		CurdData curdData = new CurdData();
 		curdData.dbTableName = table.getName();
 		curdData.ClassName = EntityMent.columnName2EntityClassName(table.getName());
-        char[] cs=curdData.ClassName.toCharArray();
-        cs[0]+=32;
-        curdData.className= String.valueOf(cs);
+		char[] cs = curdData.ClassName.toCharArray();
+		cs[0] += 32;
+		curdData.className = String.valueOf(cs);
 		curdData.dbDesc = table.getComment();
-		curdData.packageName="cn/harry12800";
-		curdData.moduleName="scan";
-		curdData.fileName=curdData.ClassName+".java";
+		curdData.fileName = curdData.ClassName + ".java";
 		curdData.table = new Table(table);
 		return curdData;
 	}
-	/**
-	 * 生成数据库的实体 bean，Mapper，xml（mybatis）
-	 * @param packageName  需要被设置的包名；如“com.newtec.tree2word.test”
-	 * @param url 如："jdbc:oracle:thin:@121.201.65.19:1521:mesdb"
-	 * @param user  数据库实例的用户名"pharm"
-	 * @param pwd  数据库实例的密码""pharm"
-	 */
-	public static void generateDbEntityByTableName(String[] packageNames, String url,
-			String user, String pwd,String tableName) {
-		Db db;
-		String packageName = packageNames[0];
-		String mapperPackageName = null;
-		if(packageNames.length>1)
-			mapperPackageName = packageNames[1];
-		if(url.contains("mysql")){
-			  db = new MysqlHelper();
-		}
-		else
-		  db = new OracleHelper();
-		List<DBTable> tableDetail = null;
-		try {
-			tableDetail = db.getTableDetail(url, user, pwd);
-			for (  DBTable  table : tableDetail) {
-				if(!table.getName().equalsIgnoreCase(tableName)) continue;
-				String clazzName = table.getName();
-				clazzName = EntityMent.columnName2EntityClassName(clazzName);
-				String tbDesc = table.getComment();
-				StringBuilder content = new StringBuilder();
-				content.append("package " + packageName + "; \r\n\r\n");
-				addClassAnnotation(content, "代码自动生成!数据库的资源文件.", url, user, pwd,
-						tbDesc);
-				
-				content.append("public class " + clazzName + " {\r\n\r\n");
-				/**
-				 * 属性定义
-				 */
-				for (DBField field : table.getFields()) {
-					String comments = field.getComment();
-					content = addAttrAnnotation(content, comments);
-					String name = field.getName();
-					name = EntityMent.columnName2EntityAttrName(name);
-					name = name.replaceAll(" ", "");
-					String type =  field.getType();
-					type = EntityMent.getDb2attrMap(type);
-					if (type == null)
-						type = "" + field.getType();
-					if(field.isPrimaryKey)
-						content.append("\t@TableField(value=\"主键\",isKey=true,type=0,sort=0, title = \"主键\",show=false, canAdd = false, canEdit = false, dbFieldName = \""+field.getName()+"\")\r\n");
-					else{
-						content.append("\t@TableField(value=\""+field.getComment()+"\",type=1,sort=1, title =\""+field.getComment()+"\", exp=true,width=100,  canAdd = true, canEdit = false, canSearch = false, dbFieldName = \""+field.getName()+"\")\r\n");
-					}
-					if ("String".equals(type)) {
-						content.append("\tprivate " + type + " ").append(name)
-								.append("= \"\";\r\n");
-					} else if ("Integer".equals(type)) {
-						content.append("\tprivate " + type + " ").append(name)
-								.append("= 0;\r\n");
-					} else if ("Double".equals(type)) {
-						content.append("\tprivate " + type + " ").append(name)
-								.append("= 0.0;\r\n");
-					} else {
-						content.append("\tprivate " + type + " ").append(name)
-								.append("= null;\r\n");
-					}
-				}
 
-				/**
-				 * getset方法添加
-				 */
-				for (DBField field : table.getFields()) {
-					String comments =field.getComment();
-					String name =  field.getName();
-					name = EntityMent.columnName2EntityAttrName(name);
-					name = name.replaceAll(" ", "");
-					String type = field.getType();
-					type = EntityMent.getDb2attrMap(type);
-					if (type == null)
-						type = field.getType();
-					addGetSetMethod(content, name, type, comments);
-				}
-				content.append("\r\n}");
-				String packageNamePath = packageName.replaceAll("[.]", "/");
-				String mapperpackageNamePath =null;
-				if(mapperPackageName!=null)
-					mapperpackageNamePath = mapperPackageName.replaceAll("[.]", "/");
-				String string= System.getProperty("user.dir") + "/src/main/java/"
-				+ packageNamePath + "/" + clazzName + ".java";
-				System.out.println(string);
-				FileUtils.createFile(string);
-				FileUtils.writeContent(string,
-						content.toString());
-				/**
-				 * mybatis的附加信息，解决字段名称不对应的问题
-				 */
-				/**
-				 * Mapper的附加信息，基本Mapper方法
-				 */
-				if(mapperPackageName!=null){
-					createMapperJavaFile( mapperPackageName,packageName,clazzName, mapperpackageNamePath);
-					createMapperXmlFile(table, mapperPackageName,packageName,clazzName, mapperpackageNamePath);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 
-	}
 	/**
 	 * 生成数据库的实体 bean
 	 * 
@@ -792,17 +745,16 @@ public class DeveloperUtils {
 		Db db;
 		String packageName = packageNames[0];
 		String mapperPackageName = null;
-		if(packageNames.length>1)
+		if (packageNames.length > 1)
 			mapperPackageName = packageNames[1];
-		if(url.contains("mysql")){
-			  db = new MysqlHelper();
-		}
-		else
-		  db = new OracleHelper();
+		if (url.contains("mysql")) {
+			db = new MysqlHelper();
+		} else
+			db = new OracleHelper();
 		List<DBTable> tableDetail = null;
 		try {
 			tableDetail = db.getTableDetail(url, user, pwd);
-			for (  DBTable  table : tableDetail) {
+			for (DBTable table : tableDetail) {
 				String clazzName = table.getName();
 				clazzName = EntityMent.columnName2EntityClassName(clazzName);
 				String tbDesc = table.getComment();
@@ -820,7 +772,7 @@ public class DeveloperUtils {
 					String name = field.getName();
 					name = EntityMent.columnName2EntityAttrName(name);
 					name = name.replaceAll(" ", "");
-					String type =  field.getType();
+					String type = field.getType();
 					type = EntityMent.getDb2attrMap(type);
 					if (type == null)
 						type = "" + field.getType();
@@ -843,8 +795,8 @@ public class DeveloperUtils {
 				 * getset方法添加
 				 */
 				for (DBField field : table.getFields()) {
-					String comments =field.getComment();
-					String name =  field.getName();
+					String comments = field.getComment();
+					String name = field.getName();
 					name = EntityMent.columnName2EntityAttrName(name);
 					name = name.replaceAll(" ", "");
 					String type = field.getType();
@@ -855,8 +807,8 @@ public class DeveloperUtils {
 				}
 				content.append("\r\n}");
 				String packageNamePath = packageName.replaceAll("[.]", "/");
-				String mapperpackageNamePath =null;
-				if(mapperPackageName!=null)
+				String mapperpackageNamePath = null;
+				if (mapperPackageName != null)
 					mapperpackageNamePath = mapperPackageName.replaceAll("[.]", "/");
 				FileUtils.writeContent(System.getProperty("user.dir") + "/src/"
 						+ packageNamePath + "/" + clazzName + ".java",
@@ -867,9 +819,9 @@ public class DeveloperUtils {
 				/**
 				 * Mapper的附加信息，基本Mapper方法
 				 */
-				if(mapperPackageName!=null){
-					createMapperJavaFile( mapperPackageName,packageName,clazzName, mapperpackageNamePath);
-					createMapperXmlFile(table, mapperPackageName,packageName,clazzName, mapperpackageNamePath);
+				if (mapperPackageName != null) {
+					createMapperJavaFile(mapperPackageName, packageName, clazzName, mapperpackageNamePath);
+					createMapperXmlFile(table, mapperPackageName, packageName, clazzName, mapperpackageNamePath);
 				}
 			}
 		} catch (Exception e) {
@@ -877,6 +829,7 @@ public class DeveloperUtils {
 		}
 
 	}
+
 	/**
 	 * mybatis 完整信息
 	 */
@@ -885,16 +838,16 @@ public class DeveloperUtils {
 			String mapperpackageNamePath) {
 		StringBuilder mybatis = new StringBuilder();
 		mybatis.append("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\r\n")
-			.append("<!DOCTYPE mapper\r\n")
-			.append("PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\"\r\n")
-					.append("\"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\r\n")
-		.append("<mapper namespace=\""+mapperPackageName+"."+clazzName+"Mapper\">\r\n");
-		addFindById(mybatis,table,packageName,clazzName);
-		addFindBySql(mybatis,table,packageName,clazzName);
-		addFindAll(mybatis,table,packageName,clazzName);
-		addSave(mybatis,table,packageName,clazzName);
-		addUpdate(mybatis,table,packageName,clazzName);
-		addDeleteByIds(mybatis,table,packageName,clazzName);
+				.append("<!DOCTYPE mapper\r\n")
+				.append("PUBLIC \"-//mybatis.org//DTD Mapper 3.0//EN\"\r\n")
+				.append("\"http://mybatis.org/dtd/mybatis-3-mapper.dtd\">\r\n")
+				.append("<mapper namespace=\"" + mapperPackageName + "." + clazzName + "Mapper\">\r\n");
+		addFindById(mybatis, table, packageName, clazzName);
+		addFindBySql(mybatis, table, packageName, clazzName);
+		addFindAll(mybatis, table, packageName, clazzName);
+		addSave(mybatis, table, packageName, clazzName);
+		addUpdate(mybatis, table, packageName, clazzName);
+		addDeleteByIds(mybatis, table, packageName, clazzName);
 		mybatis.append("\t<resultMap type='" + packageName + "."
 				+ clazzName + "' id='" + clazzName + "'>\r\n");
 		for (DBField field : table.getFields()) {
@@ -907,85 +860,92 @@ public class DeveloperUtils {
 		mybatis.append("\t</resultMap>\r\n");
 		mybatis.append("</mapper>");
 		String mapperPath = System.getProperty("user.dir") + "/src/main/resources/mapper/"
-		+ mapperpackageNamePath + "/" + clazzName + "Mapper.xml";
+				+ mapperpackageNamePath + "/" + clazzName + "Mapper.xml";
 		FileUtils.createFile(mapperPath);
 		FileUtils.writeContent(mapperPath,
 				mybatis.toString());
 	}
+
 	private static void addFindBySql(StringBuilder mybatis, DBTable table,
 			String packageName, String clazzName) {
-		mybatis.append("\t<select id='findBySql' parameterType='java.lang.String'  resultMap='"+clazzName+"' >\r\n");
+		mybatis.append("\t<select id='findBySql' parameterType='java.lang.String'  resultMap='" + clazzName + "' >\r\n");
 		mybatis.append("\t\t${value}\r\n");
 		mybatis.append("\t</select>\r\n");
 	}
+
 	private static void addDeleteByIds(StringBuilder mybatis, DBTable table, String packageName, String clazzName) {
 		mybatis.append("\t<delete id='deleteByIds' parameterType='java.lang.String'>\r\n");
-		mybatis.append("\t\tdelete from "+table.getName()+" where  ${value}\r\n");
+		mybatis.append("\t\tdelete from " + table.getName() + " where  ${value}\r\n");
 		mybatis.append("\t</delete>\r\n");
 	}
-	private static void addUpdate(StringBuilder mybatis, DBTable table,String packageName,String clazzName) {
-		mybatis.append("\t<update id='update' parameterType='"+packageName+"."+clazzName+"'>\r\n");
-		mybatis.append("\t\tupdate ").append( table.getName()).append(" set ").append(getMybatisSetAxies(table)).append(" where id=#{id}\r\n");
+
+	private static void addUpdate(StringBuilder mybatis, DBTable table, String packageName, String clazzName) {
+		mybatis.append("\t<update id='update' parameterType='" + packageName + "." + clazzName + "'>\r\n");
+		mybatis.append("\t\tupdate ").append(table.getName()).append(" set ").append(getMybatisSetAxies(table)).append(" where id=#{id}\r\n");
 		mybatis.append("\t</update>\r\n");
 	}
+
 	private static Object getMybatisSetAxies(DBTable table) {
 		List<String> allDBFieldName = table.getAllDBFieldName();
 		List<String> allFieldName = table.getAllFieldName();
-		List<String> list=new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		for (int i = 0; i < allDBFieldName.size(); i++) {
-			if(!"id".equals(allFieldName.get(i))){
-				list.add(allDBFieldName.get(i)+"=#{"+allFieldName.get(i)+"}");
+			if (!"id".equals(allFieldName.get(i))) {
+				list.add(allDBFieldName.get(i) + "=#{" + allFieldName.get(i) + "}");
 			}
 		}
 		return StringUtils.getCommaMerge(list);
 	}
-	private static void addSave(StringBuilder mybatis, DBTable table,String packageName,String clazzName) {
-		mybatis.append("\t<insert id='save' parameterType='"+packageName+"."+clazzName+"'>\r\n");
-		String string= StringUtils.getCommaMerge(table.getAllDBFieldName());
-		mybatis.append("\t\tinsert into ").append( table.getName()).append("(").append(string).append(")\r\n"); 
+
+	private static void addSave(StringBuilder mybatis, DBTable table, String packageName, String clazzName) {
+		mybatis.append("\t<insert id='save' parameterType='" + packageName + "." + clazzName + "'>\r\n");
+		String string = StringUtils.getCommaMerge(table.getAllDBFieldName());
+		mybatis.append("\t\tinsert into ").append(table.getName()).append("(").append(string).append(")\r\n");
 		mybatis.append("\t\tvalues(").append(getMybatisAxies(table)).append(")\r\n");
 		mybatis.append("\t</insert>\r\n");
 	}
-	
+
 	private static Object getMybatisAxies(DBTable table) {
 		List<String> allFieldName = table.getAllFieldName();
-		List<String> list=new ArrayList<String>();
+		List<String> list = new ArrayList<String>();
 		for (String string : allFieldName) {
-			list.add("#{"+string+"}");
+			list.add("#{" + string + "}");
 		}
 		return StringUtils.getCommaMerge(list);
 	}
-	private static void addFindAll(StringBuilder mybatis, DBTable table,String packageName,String clazzName) {
-		mybatis.append("\t<select id='findAll' resultMap='"+clazzName+"' >\r\n");
-		String string= StringUtils.getCommaMerge(table.getAllDBFieldName());
+
+	private static void addFindAll(StringBuilder mybatis, DBTable table, String packageName, String clazzName) {
+		mybatis.append("\t<select id='findAll' resultMap='" + clazzName + "' >\r\n");
+		String string = StringUtils.getCommaMerge(table.getAllDBFieldName());
 		mybatis.append("\t\tselect ").append(string).append(" from ").append(table.getName()).append("\r\n");
 		mybatis.append("\t</select>\r\n");
 	}
-	private static void addFindById(StringBuilder mybatis, DBTable table,String packageName,String clazzName) {
-		mybatis.append("\t<select id='findById' resultMap='"+clazzName+"'  parameterType='java.lang.String'>\r\n");
-		String string= StringUtils.getCommaMerge(table.getAllDBFieldName());
+
+	private static void addFindById(StringBuilder mybatis, DBTable table, String packageName, String clazzName) {
+		mybatis.append("\t<select id='findById' resultMap='" + clazzName + "'  parameterType='java.lang.String'>\r\n");
+		String string = StringUtils.getCommaMerge(table.getAllDBFieldName());
 		mybatis.append("\t\tselect ").append(string).append(" from ").append(table.getName()).append("  where id = #{id}\r\n");
 		mybatis.append("\t</select>\r\n");
 	}
-	private static void createMapperJavaFile(String mapperPackageName
-			,String packageName,String clazzName,String mapperpackageNamePath
-			) {
+
+	private static void createMapperJavaFile(String mapperPackageName, String packageName, String clazzName, String mapperpackageNamePath) {
 		StringBuilder mapper = new StringBuilder();
-		mapper.append("package "+mapperPackageName+";\r\n\r\n");
+		mapper.append("package " + mapperPackageName + ";\r\n\r\n");
 		mapper.append("import java.util.List;\r\n\r\n");
-		mapper.append("import "+packageName+"."+clazzName+";\r\n\r\n");
-		mapper.append("public interface ").append(clazzName+"Mapper extends  BaseMapper<"+clazzName+"> {\r\n");
-		mapper.append("\tpublic "+clazzName+" findById(String id);\r\n");
-		mapper.append("\tpublic List<"+clazzName+"> findAll() ;\r\n");
-		mapper.append("\tpublic int save("+clazzName+" t);\r\n");
-		mapper.append("\tpublic int update("+clazzName+" t);\r\n");
-		mapper.append("\tpublic List<"+clazzName+"> findBySql(String sql);\r\n");
+		mapper.append("import " + packageName + "." + clazzName + ";\r\n\r\n");
+		mapper.append("public interface ").append(clazzName + "Mapper extends  BaseMapper<" + clazzName + "> {\r\n");
+		mapper.append("\tpublic " + clazzName + " findById(String id);\r\n");
+		mapper.append("\tpublic List<" + clazzName + "> findAll() ;\r\n");
+		mapper.append("\tpublic int save(" + clazzName + " t);\r\n");
+		mapper.append("\tpublic int update(" + clazzName + " t);\r\n");
+		mapper.append("\tpublic List<" + clazzName + "> findBySql(String sql);\r\n");
 		mapper.append("\tpublic int deleteByIds(String ids);\r\n}");
 		String mapperPath = System.getProperty("user.dir") + "/src/main/java/"
-		+ mapperpackageNamePath + "/" + clazzName + "Mapper.java";
+				+ mapperpackageNamePath + "/" + clazzName + "Mapper.java";
 		FileUtils.createFile(mapperPath);
 		FileUtils.writeContent(mapperPath, mapper.toString());
 	}
+
 	/**
 	 * 针对mybatis字段名与属性名对不上的情况下。
 	 * 
@@ -1081,23 +1041,24 @@ public class DeveloperUtils {
 		}
 		return path;
 	}
+
 	/**
 	 * 
 	 * @param classPath
 	 * @param recursion 递归
 	 * @return
 	 */
-	private static Set<String> findProjectSrcPath(String projectPath,String classPath,boolean recursion) {
+	private static Set<String> findProjectSrcPath(String projectPath, String classPath, boolean recursion) {
 		Set<String> path = new HashSet<>(0);
 		try {
 			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
 					"//classpathentry[@kind='src']", "path");
 			for (String srcpath : nodeAttrValues) {
-				if (srcpath.startsWith("/")&&recursion) {
+				if (srcpath.startsWith("/") && recursion) {
 					path.addAll(findProjectSrcPath(workSpacePath + srcpath
 							+ "/.classpath", workSpacePath + srcpath));
 				}
-				if(!srcpath.startsWith("/")){
+				if (!srcpath.startsWith("/")) {
 					path.add(projectPath + "/" + srcpath + "/");
 				}
 			}
@@ -1106,6 +1067,7 @@ public class DeveloperUtils {
 		}
 		return path;
 	}
+
 	public static List<String> findProjectOutputPath(Class<?>... clazz)
 			throws Exception {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
@@ -1170,6 +1132,7 @@ public class DeveloperUtils {
 		}
 		return path;
 	}
+
 	/**
 	 * 获取项目的class文件输出路径
 	 * 不递归
@@ -1177,12 +1140,12 @@ public class DeveloperUtils {
 	 * @return
 	 */
 	public static String findProjectOutputPathByName(String projectName) {
-		String classPath = workSpacePath+File.separator+projectName+File.separator+".classpath";
+		String classPath = workSpacePath + File.separator + projectName + File.separator + ".classpath";
 		try {
 			List<String> output = XmlUtils.getNodeAttrValues(classPath,
 					"//classpathentry[@kind='output']", "path");
 			for (String string : output) {
-				return workSpacePath+File.separator+projectName + "/" + string + "/";
+				return workSpacePath + File.separator + projectName + "/" + string + "/";
 			}
 
 		} catch (Exception e) {
@@ -1190,13 +1153,14 @@ public class DeveloperUtils {
 		}
 		return "";
 	}
+
 	/**
 	 * 获取项目的class文件输出路径
 	 * 不递归
 	 * @param classPath
 	 * @return
 	 */
-	private static String findProjectOutputPathByName(String projectPath,String classPath) {
+	private static String findProjectOutputPathByName(String projectPath, String classPath) {
 		try {
 			List<String> output = XmlUtils.getNodeAttrValues(classPath,
 					"//classpathentry[@kind='output']", "path");
@@ -1215,7 +1179,7 @@ public class DeveloperUtils {
 	 * @param classPath
 	 * @return
 	 */
-	public static List<String> findAssociateProjectName(String classPath){
+	public static List<String> findAssociateProjectName(String classPath) {
 		List<String> path = new ArrayList<String>(0);
 		try {
 			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
@@ -1232,19 +1196,21 @@ public class DeveloperUtils {
 		}
 		return path;
 	}
-	public static List<String>  findProjectLibPathByName(String projectPath,String classPath){
+
+	public static List<String> findProjectLibPathByName(String projectPath, String classPath) {
 		List<String> libPath = new ArrayList<String>(0);
 		try {
 			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
 					"//classpathentry[@kind='lib']", "path");
 			for (String path : nodeAttrValues) {
-				libPath.add(projectPath+File.separator+path);
+				libPath.add(projectPath + File.separator + path);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return libPath;
 	}
+
 	/**
 	 * 获取项目的class文件输出路径
 	 * 
@@ -1274,56 +1240,62 @@ public class DeveloperUtils {
 		}
 		return path;
 	}
-	
+
 	static class Project {
 		public String name;
 		public String projectPath;
 		public String classpath;
 		public boolean isLoad = false;
-		public Set<String> srcPathList =new HashSet<String>(0);
+		public Set<String> srcPathList = new HashSet<String>(0);
 		public List<String> libPathList;
 		public String outputPath;
-		public List<Project> associateProtectList =new ArrayList<Project>(0);
+		public List<Project> associateProtectList = new ArrayList<Project>(0);
+
 		public Project(String name) {
 			this.name = name;
 			initDetails();
 		}
+
 		private void initDetails() {
-			projectPath = DeveloperUtils.workSpacePath+File.separator+name;
-			classpath = projectPath+File.separator+".classpath";
-			srcPathList = findProjectSrcPath(projectPath,classpath,false);
-			outputPath = findProjectOutputPathByName(projectPath,classpath);
-			System.out.println("outputPath:"+classpath);
-			libPathList = findProjectLibPathByName(projectPath,classpath);
+			projectPath = DeveloperUtils.workSpacePath + File.separator + name;
+			classpath = projectPath + File.separator + ".classpath";
+			srcPathList = findProjectSrcPath(projectPath, classpath, false);
+			outputPath = findProjectOutputPathByName(projectPath, classpath);
+			System.out.println("outputPath:" + classpath);
+			libPathList = findProjectLibPathByName(projectPath, classpath);
 			List<String> associateProjectName = findAssociateProjectName(classpath);
 			for (String name : associateProjectName) {
-				 Project project = ProjectFactory.GetInstance().createProject(name);
-				 if(!associateProtectList.contains(project))
-					 associateProtectList.add(project);
+				Project project = ProjectFactory.GetInstance().createProject(name);
+				if (!associateProtectList.contains(project))
+					associateProtectList.add(project);
 			}
-			
+
 		}
+
 		@Override
 		public String toString() {
 			return projectPath;
 		}
 	}
-	
+
 	static class ProjectFactory {
 		static ProjectFactory instance = null;
+
 		private ProjectFactory() {
 		}
+
 		static public synchronized ProjectFactory GetInstance() {
-			if(instance == null)
+			if (instance == null)
 				instance = new ProjectFactory();
 			return instance;
 		}
-		Map<String,Project> map = new HashMap<String, DeveloperUtils.Project>(0);
-		Project createProject(String name){
-			if(map.get(name)!=null){
+
+		Map<String, Project> map = new HashMap<String, DeveloperUtils.Project>(0);
+
+		Project createProject(String name) {
+			if (map.get(name) != null) {
 				return map.get(name);
-			}
-			else{
+			} else {
 				Project project = new Project(name);
 				map.put(name, project);
 				return project;
@@ -1337,18 +1309,19 @@ public class DeveloperUtils {
 	 * @return
 	 */
 	public static Set<String> getProjectSrcPath(String projectName) {
-		String projectPath = workSpacePath+File.separator+projectName;
-		String claspath =  projectPath +File.separator+".classpath";
+		String projectPath = workSpacePath + File.separator + projectName;
+		String claspath = projectPath + File.separator + ".classpath";
 		return findProjectSrcPath(projectPath, claspath, false);
 	}
+
 	/**
 	 * 获取一个项目的src路径
 	 * @param projectName
 	 * @return
 	 */
-	public static Set<String> getProjectSrcPath(String projectName,boolean recursion) {
-		String projectPath = workSpacePath+File.separator+projectName;
-		String claspath =  projectPath +File.separator+".classpath";
+	public static Set<String> getProjectSrcPath(String projectName, boolean recursion) {
+		String projectPath = workSpacePath + File.separator + projectName;
+		String claspath = projectPath + File.separator + ".classpath";
 		return findProjectSrcPath(projectPath, claspath, recursion);
 	}
 }
