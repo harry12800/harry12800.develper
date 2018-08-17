@@ -35,10 +35,10 @@ import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleN
  */
 //@Transactional(readOnly = true)
 @RestController
-@RequestMapping("/v1/${moduleName}/${subModuleName}")
+@RequestMapping("/v1/${moduleName}/${className}")
 public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
 
-	private static final String API_TAGS = "${dbDesc}/Controller";
+	private static final String API_TAGS = "${dbDesc}/${ClassName}Controller";
 
 	@Autowired
 	${ClassName}Mapper mapper;
@@ -86,7 +86,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	}
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-	@ApiOperation(httpMethod = "update", value = "修改", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(httpMethod = "POST", value = "修改", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity update(@ApiParam @RequestParam ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
@@ -107,7 +107,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	}
 
 	@RequestMapping(value = "/findById", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-	@ApiOperation(httpMethod = "findById", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity findById(@ApiParam @RequestParam ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
@@ -128,7 +128,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	}
 
 	@RequestMapping(value = "/findAll", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-	@ApiOperation(httpMethod = "findAll", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity findAll(@ApiParam @RequestParam ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
