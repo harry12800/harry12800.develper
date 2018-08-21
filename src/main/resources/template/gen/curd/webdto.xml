@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>webdto</name>
+	<filePath>src/main/java/${packagePath}/${moduleName}/controller/webdto/${subModuleName}</filePath>
+	<fileName>${ClassName}Dto.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href=" ">harry12800</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.controller.webdto<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.Date;
+
+import com.hnlens.${moduleName}.entity.${ClassName};
+
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
+/**
+ * ${functionName}Entity
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ <#list classDescList as c>
+ * <dt>${c}
+ </#list>
+ */
+ @ApiModel
+public class ${ClassName}Dto {
+	
+	<#list table.fields as c>
+		@ApiModelProperty("${c.comments}")
+		public ${c.javaType} ${c.javaName} = <#if subModuleName != "">.${subModuleName}</#if>;
+	</#list>
+ 
+	 public ${ClassName} to${ClassName}Entity() {
+		${ClassName} ${className} = new ${ClassName}();
+		<#list table.fields as c>
+			${className}.set${c.javaFieldName}(${c.javaName});
+		</#list>
+		return ${className};
+	}
+}]]>
+	</content>
+</template>

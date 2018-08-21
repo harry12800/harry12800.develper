@@ -486,6 +486,7 @@ public class DeveloperUtils {
 		manager.close();
 		URL[] urls = new URL[] { new URL("file:/E:/java/workspace/db_desc/src") };
 
+		@SuppressWarnings("resource")
 		URLClassLoader loader = new URLClassLoader(urls);
 		Class<?> c = loader.loadClass(className);
 		Field[] fs = c.getDeclaredFields();
@@ -702,12 +703,13 @@ public class DeveloperUtils {
 				curdData.classDescList.add(url);
 				curdData.classDescList.add(user);
 				curdData.classDescList.add(pwd);
-				GenEntity.gen(curdData);
-				GenDao.gen(curdData);
-				GenController.gen(curdData);
-				GenService.gen(curdData);
-				GenMybatisXml.gen(curdData);
-				GenView.gen(curdData);
+//				GenEntity.gen(curdData);
+//				GenDao.gen(curdData);
+//				GenController.gen(curdData);
+//				GenService.gen(curdData);
+//				GenMybatisXml.gen(curdData);
+//				GenView.gen(curdData);
+				GenWebDto.gen(curdData);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
