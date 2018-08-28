@@ -11,30 +11,32 @@ public class Table {
 
 	private String dbName;
 	private String javaClazzName;
-	
+
 	private String createSql;
 	private String createOracleSql;
 	private String tbDesc;
-	LinkedHashSet<Field> fields= new LinkedHashSet<Field>();
+	LinkedHashSet<Field> fields = new LinkedHashSet<Field>();
+
 	public Table(DBTable table) {
-			this.dbName = table.getName();
-			try {
-				this.createOracleSql = table.getCreateDDL(DBType.ORACLE);
-				this.createOracleSql =this.createOracleSql.replaceAll("\r\n", "\"+\r\n\t\t\"");
-				this.createSql = table.getCreateDDL(DBType.MYSQL);
-				this.createSql =this.createSql.replaceAll("\r\n", "\"+\r\n\t\t\"");
-				System.out.println(createOracleSql);
-				System.out.println(createSql);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			this.javaClazzName = EntityMent.columnName2EntityClassName(table.getName());
-			this.tbDesc = table.getComment();
-			LinkedHashSet<DBField> fields = table.getFields();
-			for (DBField dbField : fields) {
-				this.fields.add(new Field(dbField));
-			}
+		this.dbName = table.getName();
+		try {
+			this.createOracleSql = table.getCreateDDL(DBType.ORACLE);
+			this.createOracleSql = this.createOracleSql.replaceAll("\r\n", "\"+\r\n\t\t\"");
+			this.createSql = table.getCreateDDL(DBType.MYSQL);
+			this.createSql = this.createSql.replaceAll("\r\n", "\"+\r\n\t\t\"");
+			System.out.println(createOracleSql);
+			System.out.println(createSql);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		this.javaClazzName = EntityMent.columnName2EntityClassName(table.getName());
+		this.tbDesc = table.getComment();
+		LinkedHashSet<DBField> fields = table.getFields();
+		for (DBField dbField : fields) {
+			this.fields.add(new Field(dbField));
+		}
 	}
+
 	/**
 	 * 获取createSql
 	 *	@return the createSql
@@ -42,6 +44,7 @@ public class Table {
 	public String getCreateSql() {
 		return createSql;
 	}
+
 	/**
 	 * 设置createSql
 	 * @param createSql the createSql to set
@@ -49,6 +52,7 @@ public class Table {
 	public void setCreateSql(String createSql) {
 		this.createSql = createSql;
 	}
+
 	/**
 	 * 获取tbDesc
 	 *	@return the tbDesc
@@ -56,7 +60,7 @@ public class Table {
 	public String getTbDesc() {
 		return tbDesc;
 	}
-	
+
 	/**
 	 * 获取dbName
 	 *	@return the dbName
@@ -64,6 +68,7 @@ public class Table {
 	public String getDbName() {
 		return dbName;
 	}
+
 	/**
 	 * 设置dbName
 	 * @param dbName the dbName to set
@@ -71,6 +76,7 @@ public class Table {
 	public void setDbName(String dbName) {
 		this.dbName = dbName;
 	}
+
 	/**
 	 * 设置tbDesc
 	 * @param tbDesc the tbDesc to set
@@ -78,6 +84,7 @@ public class Table {
 	public void setTbDesc(String tbDesc) {
 		this.tbDesc = tbDesc;
 	}
+
 	/**
 	 * 获取javaClazzName
 	 *	@return the javaClazzName
@@ -85,6 +92,7 @@ public class Table {
 	public String getJavaClazzName() {
 		return javaClazzName;
 	}
+
 	/**
 	 * 设置javaClazzName
 	 * @param javaClazzName the javaClazzName to set
@@ -92,6 +100,7 @@ public class Table {
 	public void setJavaClazzName(String javaClazzName) {
 		this.javaClazzName = javaClazzName;
 	}
+
 	/**
 	 * 获取fields
 	 *	@return the fields
@@ -99,6 +108,7 @@ public class Table {
 	public LinkedHashSet<Field> getFields() {
 		return fields;
 	}
+
 	/**
 	 * 设置fields
 	 * @param fields the fields to set
@@ -106,6 +116,7 @@ public class Table {
 	public void setFields(LinkedHashSet<Field> fields) {
 		this.fields = fields;
 	}
+
 	/**
 	 * 获取createOracleSql
 	 *	@return the createOracleSql
@@ -113,6 +124,7 @@ public class Table {
 	public String getCreateOracleSql() {
 		return createOracleSql;
 	}
+
 	/**
 	 * 设置createOracleSql
 	 * @param createOracleSql the createOracleSql to set
@@ -120,5 +132,5 @@ public class Table {
 	public void setCreateOracleSql(String createOracleSql) {
 		this.createOracleSql = createOracleSql;
 	}
-	
+
 }

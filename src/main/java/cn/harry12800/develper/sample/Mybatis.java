@@ -9,17 +9,17 @@ public class Mybatis {
 		String user = "root";
 		String pwd = "Lenovo,,123";
 		String tableName = "api,application,auto_api_markdown,directory,markdown,resource,resource_transfer,user";
-//		String url = "jdbc:mysql://127.0.0.1/scan?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8";
-//		String user = "root";
-//		String pwd = "admin";
-//		String tableName = "chat_msg";
-//		DeveloperUtils.createBuilder().setBasePackage("cn.harry12800.vchat.server")
-//		.setModuleName("module")
-//		.setUrl(url)
-//		.setUser(user)
-//		.setPwd(pwd)
-//		.setTableName(tableName)
-//		.build();
+		//		String url = "jdbc:mysql://127.0.0.1/scan?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8";
+		//		String user = "root";
+		//		String pwd = "admin";
+		//		String tableName = "chat_msg";
+		//		DeveloperUtils.createBuilder().setBasePackage("cn.harry12800.vchat.server")
+		//		.setModuleName("module")
+		//		.setUrl(url)
+		//		.setUser(user)
+		//		.setPwd(pwd)
+		//		.setTableName(tableName)
+		//		.build();
 		DeveloperUtils.createBuilder().setBasePackage("com.hnlens")
 				.setModuleName("doc")
 				.setUrl(url)

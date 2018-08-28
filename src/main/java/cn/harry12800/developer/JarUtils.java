@@ -22,6 +22,7 @@ import java.util.jar.Manifest;
 import cn.harry12800.developer.DeveloperUtils.Project;
 import cn.harry12800.tools.MachineUtils;
 import cn.harry12800.tools.StringUtils;
+
 @SuppressWarnings("resource")
 public class JarUtils {
 	public static String workSpacePath = "";
@@ -269,7 +270,6 @@ public class JarUtils {
 		System.out.println("*** --> jar包生成完毕。jar文件输出路径：" + jarPath);
 	}
 
-	
 	private static void mergeJarFile(Project project, JarOutputStream target, Set<String> set) throws IOException {
 		List<String> libPathList = project.libPathList;
 		for (Project pro : project.associateProtectList) {

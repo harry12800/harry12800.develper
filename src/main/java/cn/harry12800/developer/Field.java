@@ -5,32 +5,32 @@ import cn.harry12800.tools.EntityMent;
 
 public class Field {
 
-	
-	private String comments="";
-	private String content="";
-	private String dbName="";
-	private String javaName="";
-	private String javaFieldName="";
-	private String dbType="";
-	private String javaType="";
+	private String comments = "";
+	private String content = "";
+	private String dbName = "";
+	private String javaName = "";
+	private String javaFieldName = "";
+	private String dbType = "";
+	private String javaType = "";
 	private String tableFieldAnno;
 
 	public Field(DBField field) {
-		this.comments = field.getComment()==null?"": field.getComment();
+		this.comments = field.getComment() == null ? "" : field.getComment();
 		this.dbName = field.getName();
 		this.javaName = EntityMent.columnName2EntityAttrName(field.getName()).replaceAll(" ", "");
-		this.dbType =  field.getType();
+		this.dbType = field.getType();
 		this.javaType = EntityMent.getDb2attrMap(field.getType());
 		if (javaType == null)
 			javaType = "" + field.getType();
-		
-		char[] cs=javaName.toCharArray();
-        cs[0]-=32;
-        javaFieldName= String.valueOf(cs);
-		if(field.isPrimaryKey)
-			this.tableFieldAnno=("@DbField(value=\"主键\",isKey=true,type=0, title = \"主键\",show=false, canAdd = false, canEdit = false, dbFieldName = \""+field.getName()+"\")");
-		else{
-			this.tableFieldAnno=("@DbField(value=\""+field.getComment()+"\",type=1,sort=1, title =\""+field.getComment()+"\", exp=true,  canAdd = true, canEdit = false, canSearch = false, dbFieldName = \""+field.getName()+"\")");
+
+		char[] cs = javaName.toCharArray();
+		cs[0] -= 32;
+		javaFieldName = String.valueOf(cs);
+		if (field.isPrimaryKey)
+			this.tableFieldAnno = ("@DbField(value=\"主键\",isKey=true,type=0, title = \"主键\",show=false, canAdd = false, canEdit = false, dbFieldName = \"" + field.getName() + "\")");
+		else {
+			this.tableFieldAnno = ("@DbField(value=\"" + field.getComment() + "\",type=1,sort=1, title =\"" + field.getComment()
+					+ "\", exp=true,  canAdd = true, canEdit = false, canSearch = false, dbFieldName = \"" + field.getName() + "\")");
 		}
 	}
 
@@ -161,5 +161,5 @@ public class Field {
 	public void setTableFieldAnno(String tableFieldAnno) {
 		this.tableFieldAnno = tableFieldAnno;
 	}
-	
+
 }

@@ -8,23 +8,23 @@ import java.util.Map;
 import cn.harry12800.tools.Maps;
 
 public class CurdData {
-	public String functionName ="";
-	public String functionAuthor="周国柱";
-	public String functionVersion="1.0";
-	public String name="";
-	public String filePath="";
-	public String fileName="";
-	public String content="";
-	
-	public String packagePath="";
-	public String packageName="";
-	public String moduleName="";
-	public String subModuleName="";
+	public String functionName = "";
+	public String functionAuthor = "周国柱";
+	public String functionVersion = "1.0";
+	public String name = "";
+	public String filePath = "";
+	public String fileName = "";
+	public String content = "";
+
+	public String packagePath = "";
+	public String packageName = "";
+	public String moduleName = "";
+	public String subModuleName = "";
 	/**
 	 * 类名
 	 */
-	public String ClassName="";
-	public String className="";
+	public String ClassName = "";
+	public String className = "";
 	/**
 	 * 数据库表名
 	 */
@@ -33,14 +33,16 @@ public class CurdData {
 	 * 数据库注释
 	 */
 	public String dbDesc;
- 
+
 	public List<String> importList = new ArrayList<>();
 	public List<String> classDescList = new ArrayList<>();
 	public Table table;
+
 	public String toString() {
 		return "Template [name=" + name + ", filePath=" + filePath
 				+ ", fileName=" + fileName + ", ]";
 	}
+
 	public Map<Object, Object> toMap() {
 		HashMap<Object, Object> newHashMap = Maps.newHashMap();
 		newHashMap.put("functionName", dbDesc);
@@ -61,7 +63,7 @@ public class CurdData {
 		newHashMap.put("table", table);
 		newHashMap.put("importList", importList);
 		newHashMap.put("classDescList", classDescList);
-		classDescList.add("代码自动生成!数据库的资源文件." );
+		classDescList.add("代码自动生成!数据库的资源文件.");
 		return newHashMap;
 	}
 }

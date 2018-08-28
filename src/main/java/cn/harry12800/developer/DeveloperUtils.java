@@ -616,9 +616,11 @@ public class DeveloperUtils {
 		str.append(" */\r\n");
 		return str;
 	}
-	public static Builder createBuilder(){
+
+	public static Builder createBuilder() {
 		return new Builder();
 	}
+
 	public static class Builder {
 		String basePackage;
 		String moduleName;
@@ -627,42 +629,35 @@ public class DeveloperUtils {
 		String pwd;
 		String tableName;
 
-		
 		public Builder setBasePackage(String basePackage) {
 			this.basePackage = basePackage;
 			return this;
 		}
-
 
 		public Builder setModuleName(String moduleName) {
 			this.moduleName = moduleName;
 			return this;
 		}
 
-
 		public Builder setUrl(String url) {
 			this.url = url;
 			return this;
 		}
-
 
 		public Builder setUser(String user) {
 			this.user = user;
 			return this;
 		}
 
-
 		public Builder setPwd(String pwd) {
 			this.pwd = pwd;
 			return this;
 		}
 
-
 		public Builder setTableName(String tableName) {
 			this.tableName = tableName;
 			return this;
 		}
-
 
 		public void build() {
 			String[] split = tableName.split(",");
@@ -703,12 +698,12 @@ public class DeveloperUtils {
 				curdData.classDescList.add(url);
 				curdData.classDescList.add(user);
 				curdData.classDescList.add(pwd);
-//				GenEntity.gen(curdData);
-//				GenDao.gen(curdData);
-//				GenController.gen(curdData);
-//				GenService.gen(curdData);
-//				GenMybatisXml.gen(curdData);
-//				GenView.gen(curdData);
+				//				GenEntity.gen(curdData);
+				//				GenDao.gen(curdData);
+				//				GenController.gen(curdData);
+				//				GenService.gen(curdData);
+				//				GenMybatisXml.gen(curdData);
+				//				GenView.gen(curdData);
 				GenWebDto.gen(curdData);
 			}
 		} catch (Exception e) {
@@ -728,7 +723,6 @@ public class DeveloperUtils {
 		curdData.table = new Table(table);
 		return curdData;
 	}
-
 
 	/**
 	 * 生成数据库的实体 bean
