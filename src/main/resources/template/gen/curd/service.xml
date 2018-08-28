@@ -29,9 +29,7 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	@Autowired
 	${ClassName}Mapper mapper;
 	
-	public ${ClassName} findById(String id){
-		return mapper.findById(id);
-	}
+	 
 	public List<${ClassName}> findAll() {
 		return mapper.findAll();
 	}
@@ -47,9 +45,7 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	public int deleteByIds(String ids){
 		return mapper.deleteByIds(ids);
 	}
-	public int deleteById(String id){
-		return mapper.deleteById(id);
-	}
+	 
 }]]>
 	</content>
 </template>

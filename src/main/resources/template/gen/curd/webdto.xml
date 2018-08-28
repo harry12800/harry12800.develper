@@ -25,14 +25,20 @@ import io.swagger.annotations.ApiModelProperty;
  */
  @ApiModel
 public class ${ClassName}Dto {
-	
+	<#list table.keyFields as c>
+		@ApiModelProperty("${c.comments}")
+		public ${c.javaType} ${c.javaName} = <#if c.javaType= "String">"";</#if><#if c.javaType= "Integer">0;</#if><#if c.javaType= "Long">0L;</#if>
+	</#list>
 	<#list table.fields as c>
 		@ApiModelProperty("${c.comments}")
-		public ${c.javaType} ${c.javaName} = <#if subModuleName != "">.${subModuleName}</#if>;
+		public ${c.javaType} ${c.javaName} = <#if c.javaType= "String">"";</#if><#if c.javaType= "Integer">0;</#if><#if c.javaType= "Long">0L;</#if><#if c.javaType= "java.util.Date">new java.util.Date();</#if>
 	</#list>
  
 	 public ${ClassName} to${ClassName}Entity() {
 		${ClassName} ${className} = new ${ClassName}();
+		<#list table.keyFields as c>
+			${className}.set${c.javaFieldName}(${c.javaName});
+		</#list>
 		<#list table.fields as c>
 			${className}.set${c.javaFieldName}(${c.javaName});
 		</#list>

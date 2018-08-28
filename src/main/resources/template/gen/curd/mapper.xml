@@ -9,6 +9,8 @@
 package ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>;
 
 import java.util.List;
+
+import org.apache.ibatis.annotations.Param;
 import ${packageName}.${moduleName}.entity.${ClassName};
 <#list importList as i>
 import ${i};
@@ -27,22 +29,29 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	
 	/**
 	* 通过多个id删除多行数据
-	* 字符串ids的样子 eg:  `id in ('a','b')`
-	**/
+	* 字符串ids的样子 eg:  `id in ('a','b')`  数字型的是  `id in (a,b)`
+	*/
 	int deleteByIds(String ids);
 	
+	<#list table.keyFields as c>
 	/**
-	* 删除单行数据
-	*/
-	int deleteById(String id);
-
-	/**
+	 * 删除单行数据 ${c.comments}
+	 * @param id
+	 * @return
+	 */
+ 	int deleteById(${c.javaType} ${c.javaName});
+ 	/**
 	 * 查找一行数据
 	 * @param id
 	 * @return
 	 */
-	${ClassName} findById(String id);
-
+	${ClassName} findById(${c.javaType} ${c.javaName});
+	</#list>	
+	
+	/**
+	* 查询根据字段名称和数据
+	**/
+	List<${ClassName}> findByParam(@Param("propName") String propName,@Param("value") Object value);
 	/**
 	* 删除多行数据
 	**/

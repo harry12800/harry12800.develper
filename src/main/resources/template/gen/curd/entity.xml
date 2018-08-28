@@ -26,7 +26,14 @@ import ${i};
 //@DbTable(tableName = "${table.dbName}")
 public class ${ClassName} { // extends DataEntity<${ClassName}> {
 //	private static final long serialVersionUID = 1L;
-	
+
+	<#list table.keyFields as c>
+	/**
+	 * ${c.comments}
+	 */
+//	${c.tableFieldAnno}
+ 	private ${c.javaType}	${c.javaName};
+	</#list>	
 	<#list table.fields as c>
 	/**
 	 * ${c.comments}
@@ -38,6 +45,28 @@ public class ${ClassName} { // extends DataEntity<${ClassName}> {
 	public static String initSql="${table.createSql}";
 //	@DbInitSentence(type = DbInitType.Create)
 	public static String initOracleSql="${table.createOracleSql}";
+	
+	
+	<#list table.keyFields as c>
+	/**
+	 *获取${c.comments}
+	 */
+ 	public  ${c.javaType}	get${c.javaFieldName}() {
+ 		return ${c.javaName};
+ 	}
+	</#list>
+	
+	<#list table.keyFields as c>
+	/**
+	 * 设值${c.comments}
+	 */
+ 	public void	set${c.javaFieldName}(${c.javaType} ${c.javaName}) {
+ 		this.${c.javaName} = ${c.javaName};
+ 	}
+	</#list>
+	
+	
+	
 	<#list table.fields as c>
 	/**
 	 *获取${c.comments}

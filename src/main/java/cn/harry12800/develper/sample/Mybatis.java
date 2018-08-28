@@ -5,9 +5,9 @@ import cn.harry12800.developer.DeveloperUtils;
 public class Mybatis {
 
 	public static void main(String[] args) {
-		String url = "jdbc:mysql://10.3.9.142:3306/fingerchat_dev_docs?useSSL=false&allowMultiQueries=true";
+		String url = "jdbc:mysql://172.16.6.218:3306/fingerchat_dev_docs?useSSL=false&allowMultiQueries=true";
 		String user = "root";
-		String pwd = "Lenovo,,123";
+		String pwd = "root@123456";
 		String tableName = "api,application,auto_api_markdown,directory,markdown,resource,resource_transfer,user";
 		//		String url = "jdbc:mysql://127.0.0.1/scan?useSSL=false&useUnicode=true&characterEncoding=utf8&characterSetResults=utf8";
 		//		String user = "root";

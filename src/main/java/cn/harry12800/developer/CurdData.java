@@ -63,7 +63,6 @@ public class CurdData {
 		newHashMap.put("table", table);
 		newHashMap.put("importList", importList);
 		newHashMap.put("classDescList", classDescList);
-		classDescList.add("代码自动生成!数据库的资源文件.");
 		return newHashMap;
 	}
 }

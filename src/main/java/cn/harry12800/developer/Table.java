@@ -16,6 +16,7 @@ public class Table {
 	private String createOracleSql;
 	private String tbDesc;
 	LinkedHashSet<Field> fields = new LinkedHashSet<Field>();
+	LinkedHashSet<Field> keyFields = new LinkedHashSet<Field>();
 
 	public Table(DBTable table) {
 		this.dbName = table.getName();
@@ -33,8 +34,22 @@ public class Table {
 		this.tbDesc = table.getComment();
 		LinkedHashSet<DBField> fields = table.getFields();
 		for (DBField dbField : fields) {
-			this.fields.add(new Field(dbField));
+			Field field = new Field(dbField);
+			if(field.getIsKey()){
+				this.keyFields.add(field);
+			}
+			else{
+				this.fields.add(field);
+			}
 		}
+	}
+
+	public LinkedHashSet<Field> getKeyFields() {
+		return keyFields;
+	}
+
+	public void setKeyFields(LinkedHashSet<Field> keyFields) {
+		this.keyFields = keyFields;
 	}
 
 	/**

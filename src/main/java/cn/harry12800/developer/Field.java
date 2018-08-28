@@ -12,26 +12,38 @@ public class Field {
 	private String javaFieldName = "";
 	private String dbType = "";
 	private String javaType = "";
+	private String javaCompleteType = "";
 	private String tableFieldAnno;
-
+	private boolean isKey;
 	public Field(DBField field) {
 		this.comments = field.getComment() == null ? "" : field.getComment();
 		this.dbName = field.getName();
 		this.javaName = EntityMent.columnName2EntityAttrName(field.getName()).replaceAll(" ", "");
 		this.dbType = field.getType();
-		this.javaType = EntityMent.getDb2attrMap(field.getType());
+		String[] db2attrMap = EntityMent.getDb2attrMap(field.getType());
+		this.javaType = db2attrMap[0];
+		this.javaCompleteType = db2attrMap[1];
 		if (javaType == null)
 			javaType = "" + field.getType();
 
 		char[] cs = javaName.toCharArray();
 		cs[0] -= 32;
 		javaFieldName = String.valueOf(cs);
+		if(field.isPrimaryKey) isKey=true;
 		if (field.isPrimaryKey)
 			this.tableFieldAnno = ("@DbField(value=\"主键\",isKey=true,type=0, title = \"主键\",show=false, canAdd = false, canEdit = false, dbFieldName = \"" + field.getName() + "\")");
 		else {
 			this.tableFieldAnno = ("@DbField(value=\"" + field.getComment() + "\",type=1,sort=1, title =\"" + field.getComment()
 					+ "\", exp=true,  canAdd = true, canEdit = false, canSearch = false, dbFieldName = \"" + field.getName() + "\")");
 		}
+	}
+
+	public String getJavaCompleteType() {
+		return javaCompleteType;
+	}
+
+	public void setJavaCompleteType(String javaCompleteType) {
+		this.javaCompleteType = javaCompleteType;
 	}
 
 	/**
@@ -161,5 +173,14 @@ public class Field {
 	public void setTableFieldAnno(String tableFieldAnno) {
 		this.tableFieldAnno = tableFieldAnno;
 	}
+
+	public Boolean getIsKey() {
+		return isKey;
+	}
+
+	public void setIsKey(Boolean isKey) {
+		this.isKey = isKey;
+	}
+	
 
 }

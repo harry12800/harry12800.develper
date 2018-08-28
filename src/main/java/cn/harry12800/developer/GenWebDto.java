@@ -47,7 +47,7 @@ public class GenWebDto {
 		XmlTemplate template = new XmlTemplate();
 		Field[] f = XmlTemplate.class.getDeclaredFields();
 		for (int i = 0; i < length; i++) {
-			System.out.println(childNodes.item(i).getTextContent());
+//			System.out.println(childNodes.item(i).getTextContent());
 			for (Field field : f) {
 				if (field.getName().equals(childNodes.item(i).getNodeName())) {
 					field.setAccessible(true);
@@ -55,9 +55,9 @@ public class GenWebDto {
 				}
 			}
 		}
-		System.out.println(template);
+//		System.out.println(template);
 		FileUtils.createFile(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName);
 		FileUtils.writeContent(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName, template.content);
-		System.out.println(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName);
+//		System.out.println(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName);
 	}
 }
