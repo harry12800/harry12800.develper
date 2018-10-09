@@ -40,14 +40,28 @@ public class CodeCounter {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-		code("harry12800.j2se");
+//		code("harry12800.j2se");
 		//    	code("gznytm.serial");
 		//    	Set<String> projectSrcPath = DeveloperUtils.getProjectSrcPath("gznytm.serial",false);
 		//    	for (String string : projectSrcPath) {
 		//    		//DeveloperUtils.notifyAddAnnotation(string);
 		//		}
+		codePath("C:/Workspaces");
 	}
 
+	public static void codePath(String path){
+		ArrayList<File> al = getFile(new File(path));
+		for (File f : al) {
+			if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件  
+				count1(f);
+				System.out.println(f);
+			}
+		}
+		System.out.println("统计文件：" + files);
+		System.out.println("代码行数：" + codeLines);
+		System.out.println("注释行数：" + commentLines);
+		System.out.println("空白行数：" + blankLines);
+	}
 	/** 
 	 * 代码行数统计 
 	 */
@@ -179,7 +193,7 @@ public class CodeCounter {
 				}
 			}
 			files++;
-			FileUtils.appendContent("d:/d.txt", sbBuffer.toString());
+			FileUtils.appendContent("z:/d.txt", sbBuffer.toString());
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {

@@ -26,6 +26,7 @@ import cn.harry12800.dbhelper.Db;
 import cn.harry12800.dbhelper.MysqlHelper;
 import cn.harry12800.dbhelper.OracleHelper;
 import cn.harry12800.dbhelper.entity.DBTable;
+import cn.harry12800.developer.DeveloperUtils.Builder;
 import cn.harry12800.tools.EntityMent;
 import cn.harry12800.tools.FileUtils;
 import cn.harry12800.tools.MachineUtils;
@@ -627,6 +628,7 @@ public class DeveloperUtils {
 		String user;
 		String pwd;
 		String tableName;
+		String databaseName;
 
 		public Builder setBasePackage(String basePackage) {
 			this.basePackage = basePackage;
@@ -660,12 +662,37 @@ public class DeveloperUtils {
 
 		public void build() {
 			String[] split = tableName.split(",");
-			for (String string : split) {
-				generateDbEntityByTableNameUseFreemarker(basePackage, moduleName, url, user, pwd, string);
+			for (String tableName : split) {
+				generateDbEntityByTableNameUseFreemarker(basePackage, moduleName, url, user, pwd,databaseName, tableName);
 			}
 		}
-	}
 
+		public Builder setDatabaseName(String databaseName) {
+			this.databaseName = databaseName;
+			return this;
+		}
+	}
+	public static void generateDescFile(
+			String url,
+			String user,
+			String pwd
+			) {
+		Db db;
+		if (url.contains("mysql")) {
+			db = new MysqlHelper();
+		} else
+			db = new OracleHelper();
+		try {
+			db.generateDescFile(url, user, pwd, getProjectPath()+"/src/main/resources/");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	public static String getProjectPath() {
+		String workspace = System.getProperty("user.dir");
+		workspace = workspace.replaceAll("\\\\", "/");
+		return workspace;
+	}
 	/**
 	 * 根据模板生成java文件。entity，dao，service，web。mapper.xml;
 	 * @param url
@@ -678,6 +705,7 @@ public class DeveloperUtils {
 			String url,
 			String user,
 			String pwd,
+			String databaseName,
 			String tableName) {
 		Db db;
 		if (url.contains("mysql")) {
@@ -694,6 +722,7 @@ public class DeveloperUtils {
 				curdData.packageName = basePackage;
 				curdData.packagePath = basePackage.replaceAll("[.]", "/");
 				curdData.moduleName = moduleName;
+				curdData.databaseName = databaseName;
 				curdData.classDescList.add(url);
 				curdData.classDescList.add(user);
 				curdData.classDescList.add(pwd);

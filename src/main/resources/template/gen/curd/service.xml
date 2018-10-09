@@ -9,6 +9,7 @@
 package ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -33,17 +34,19 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	public List<${ClassName}> findAll() {
 		return mapper.findAll();
 	}
+	public List<${ClassName}> findByIds(Set<?> set){
+		return mapper.findByIds(set);
+	}
+	
 	public int save(${ClassName} t){
 		return mapper.save(t);
 	}
 	public int update(${ClassName} t){
 		return mapper.update(t);
 	}
-	public List<${ClassName}> findBySql(String sql){
-		return mapper.findBySql(sql);
-	}
-	public int deleteByIds(String ids){
-		return mapper.deleteByIds(ids);
+	 
+	public int deleteByIds(Set<?> set){
+		return mapper.deleteByIds(set);
 	}
 	 
 }]]>

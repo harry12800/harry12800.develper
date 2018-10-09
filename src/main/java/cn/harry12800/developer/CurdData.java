@@ -37,6 +37,7 @@ public class CurdData {
 	public List<String> importList = new ArrayList<>();
 	public List<String> classDescList = new ArrayList<>();
 	public Table table;
+	public String databaseName;
 
 	public String toString() {
 		return "Template [name=" + name + ", filePath=" + filePath
@@ -60,6 +61,7 @@ public class CurdData {
 		newHashMap.put("className", className);
 		newHashMap.put("dbTableName", dbTableName);
 		newHashMap.put("dbDesc", dbDesc);
+		newHashMap.put("databaseName", databaseName);
 		newHashMap.put("table", table);
 		newHashMap.put("importList", importList);
 		newHashMap.put("classDescList", classDescList);

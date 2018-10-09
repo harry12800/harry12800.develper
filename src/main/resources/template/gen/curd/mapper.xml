@@ -9,6 +9,7 @@
 package ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.ibatis.annotations.Param;
 import ${packageName}.${moduleName}.entity.${ClassName};
@@ -31,7 +32,7 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	* 通过多个id删除多行数据
 	* 字符串ids的样子 eg:  `id in ('a','b')`  数字型的是  `id in (a,b)`
 	*/
-	int deleteByIds(String ids);
+	int deleteByIds(Set<?> ids);
 	
 	<#list table.keyFields as c>
 	/**
@@ -56,7 +57,10 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	* 删除多行数据
 	**/
 	List<${ClassName}> findAll();
-
+	/**
+	* 查询多行数据
+	**/
+	List<${ClassName}> findByIds(Set<?> set);
 	/**
 	* 保存数据
 	*/
@@ -67,11 +71,7 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	*/
 	int update(${ClassName} t);
 	
-	/**
-	* 自定义sql语句查询列表
-	*/
-	List<${ClassName}> findBySql(String sql);
-	
 }]]>
 	</content>
+
 </template>

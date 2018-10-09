@@ -8,40 +8,57 @@
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="${packageName}.${moduleName}.mapper.${ClassName}Mapper">
-
+	<sql id="Base_Column_List">
+		<#list table.keyFields as c> ${c.dbName},</#list> 
+			<#list table.fields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list> 
+	</sql>
 	<#list table.keyFields as c1>
 	<select id='findById' resultMap='${ClassName}'  parameterType='${c1.javaCompleteType}'>
 		select 
-			<#list table.keyFields as c> ${c.dbName},</#list> 
-			<#list table.fields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list> from ${table.dbName} 
+			<include refid="Base_Column_List" />
+			 from ${databaseName}.${table.dbName} 
 			 where ${c1.dbName} = ${"#"}{value}
 	</select>
 	</#list>	
-
-	<select id='findBySql' parameterType='java.lang.String'  resultMap='${ClassName}' >
-		 ${"$"}{value}
-	</select>
 	
 	<#list table.keyFields as c1>
 	<select id='findByParam' resultMap='${ClassName}' >
 		select 
-			<#list table.keyFields as c> ${c.dbName},</#list> 
-			<#list table.fields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list> from ${table.dbName} 
+			<include refid="Base_Column_List" />
+			 from ${databaseName}.${table.dbName} 
 			 where ${"$"}{propName} = ${"#"}{value}
 	</select>
 	</#list>
 	
 	<select id='findAll' resultMap='${ClassName}' >
-		select <#list table.fields as c><#if c_has_next>${c.dbName},</#if> <#if !c_has_next>${c.dbName}</#if></#list> from ${table.dbName}
+		select
+			<include refid="Base_Column_List" />
+			 from ${databaseName}.${table.dbName}
 	</select>
+	<delete id='findByIds' parameterType='java.util.Set'>
+		select
+			<include refid="Base_Column_List" />
+			 from ${databaseName}.${table.dbName} where  
+		<choose>
+			<when test='set !=null and set.size()>0'>
+				<#list table.keyFields as c> ${c.dbName} </#list> in 
+				<foreach item = 'id' index='index' collection='set' open='(' separator=',' close=')'>
+					${"#"}{id}
+				</foreach>
+			</when>
+			<otherwise>
+			 0 = 1
+			</otherwise>
+		</choose>
+	</delete>
 	<insert id='save' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
-		insert into ${table.dbName}(
+		insert into ${databaseName}.${table.dbName}(
 		<#list table.fields as c> <#if c_has_next>${c.dbName},</#if> <#if !c_has_next>${c.dbName}</#if></#list>)
 		values(<#list table.fields as c><#if c_has_next>${"#"}{${c.javaName}},</#if><#if !c_has_next>${"#"}{${c.javaName}}</#if>
 		</#list>)
 	</insert>
 	<update id='update' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
-		update ${table.dbName} set
+		update ${databaseName}.${table.dbName} set
 		<#list table.fields as c>
 		 <#if c_has_next>${c.dbName}=${"#"}{${c.javaName}},</#if>
 		 <#if !c_has_next>${c.dbName}=${"#"}{${c.javaName}}</#if></#list>
@@ -49,14 +66,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</update>
 	<#list table.keyFields as c1>
 	<delete id='deleteById' parameterType='${c1.javaCompleteType}'>
-		delete from ${table.dbName} where  ${c1.dbName} = ${"#"}{value}
+		delete from ${databaseName}.${table.dbName} where  ${c1.dbName} = ${"#"}{value}
 	</delete>
 	</#list>
-	<delete id='deleteByIds' parameterType='java.lang.String'>
-		delete from ${table.dbName} where  ${"#"}{value}
+	<!-- ${"#"}{value} -->
+	<delete id='deleteByIds' parameterType='java.util.Set'>
+		delete from ${databaseName}.${table.dbName} where  
+		<choose>
+			<when test='set !=null and set.size()>0'>
+				<#list table.keyFields as c> ${c.dbName} </#list> in 
+				<foreach item = 'id' index='index' collection='set' open='(' separator=',' close=')'>
+					${"#"}{id}
+				</foreach>
+			</when>
+			<otherwise>
+			 0 = 1
+			</otherwise>
+		</choose>
 	</delete>
+	
+	
 	<resultMap type='${packageName}.${moduleName}.entity.${ClassName}' id='${ClassName}'>
-		<#list table.keyFields as c>
+		<#list table.keyFields as c> 
 			<result property='${c.javaName}' column='${c.dbName}'/>
 		</#list>
 		<#list table.fields as c>

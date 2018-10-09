@@ -49,4 +49,16 @@
             <version>2.3.23</version>
         </dependency>
     </dependencies>
+    <distributionManagement>
+	    <repository>
+	        <id>maven-releases</id>
+	        <name>maven-central</name>
+	        <url>http://10.3.6.181:8081/repository/maven-releases/</url>
+	    </repository>
+	    <snapshotRepository>
+	        <id>snapshots</id>
+	        <name>maven-snapshots</name>
+	        <url>http://10.3.6.181:8081/repository/maven-snapshots/</url>
+	    </snapshotRepository>
+	</distributionManagement>
 </project>

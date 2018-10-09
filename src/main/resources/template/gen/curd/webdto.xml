@@ -8,7 +8,6 @@
  */
 package ${packageName}.${moduleName}.controller.webdto<#if subModuleName != "">.${subModuleName}</#if>;
 
-import java.util.Date;
 
 import com.hnlens.${moduleName}.entity.${ClassName};
 
@@ -31,18 +30,18 @@ public class ${ClassName}Dto {
 	</#list>
 	<#list table.fields as c>
 		@ApiModelProperty("${c.comments}")
-		public ${c.javaType} ${c.javaName} = <#if c.javaType= "String">"";</#if><#if c.javaType= "Integer">0;</#if><#if c.javaType= "Long">0L;</#if><#if c.javaType= "java.util.Date">new java.util.Date();</#if>
+		public ${c.javaType} ${c.javaName} = <#if c.javaType= "String">"";</#if><#if c.javaType= "Integer">0;</#if><#if c.javaType= "Long">0L;</#if><#if c.javaType= "Double">0.0;</#if><#if c.javaType= "java.util.Date">new java.util.Date();</#if>
 	</#list>
  
 	 public ${ClassName} to${ClassName}Entity() {
-		${ClassName} ${className} = new ${ClassName}();
+		${ClassName} ${className}Tmp = new ${ClassName}();
 		<#list table.keyFields as c>
-			${className}.set${c.javaFieldName}(${c.javaName});
+			${className}Tmp.set${c.javaFieldName}(${c.javaName});
 		</#list>
 		<#list table.fields as c>
-			${className}.set${c.javaFieldName}(${c.javaName});
+			${className}Tmp.set${c.javaFieldName}(${c.javaName});
 		</#list>
-		return ${className};
+		return ${className}Tmp;
 	}
 }]]>
 	</content>

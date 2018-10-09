@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hnlens.doc.http.ResponseEntity;
+import com.hnlens.http.ResponseEntity;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -34,6 +34,7 @@ import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleN
  * @version ${functionVersion}
  */
 //@Transactional(readOnly = true)
+@SuppressWarnings("unused")
 @RestController
 @RequestMapping("/v1/${moduleName}/${className}")
 public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
@@ -73,7 +74,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			int save = mapper.deleteById("");
+			int save = mapper.deleteById(<#list table.keyFields as c><#if c_has_next>${className}.get${c.javaFieldName}(),</#if><#if !c_has_next>${className}.get${c.javaFieldName}()</#if></#list>);
 			r.setContent(new Object() {
 				public int result = save;
 			});
@@ -115,7 +116,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			${ClassName} findById = mapper.findById("");
+			${ClassName} findById = mapper.findById(<#list table.keyFields as c><#if c_has_next>${className}.get${c.javaFieldName}(),</#if><#if !c_has_next>${className}.get${c.javaFieldName}()</#if></#list>);
 			r.setContent(new Object() {
 				public ${ClassName} ${className} = findById;
 			});
