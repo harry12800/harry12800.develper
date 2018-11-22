@@ -4,7 +4,7 @@
 	<filePath>src/main/java/${packagePath}/${moduleName}/mapper/${subModuleName}</filePath>
 	<fileName>${ClassName}Mapper.java</fileName>
 	<content><![CDATA[/**
- * Copyright &copy; 2015-2020 <a href=" ">harry12800</a> All rights reserved.
+ * Copyright &copy; 2015-2020 <a href="http://www.harry12800.xyz/">harry12800</a> All rights reserved.
  */
 package ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>;
 

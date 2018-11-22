@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<include refid="Base_Column_List" />
 			 from ${databaseName}.${table.dbName}
 	</select>
-	<delete id='findByIds' parameterType='java.util.Set'>
+	<select id='findByIds' parameterType='java.util.Set'>
 		select
 			<include refid="Base_Column_List" />
 			 from ${databaseName}.${table.dbName} where  
@@ -50,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			 0 = 1
 			</otherwise>
 		</choose>
-	</delete>
+	</select>
 	<insert id='save' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		insert into ${databaseName}.${table.dbName}(
 		<#list table.fields as c> <#if c_has_next>${c.dbName},</#if> <#if !c_has_next>${c.dbName}</#if></#list>)

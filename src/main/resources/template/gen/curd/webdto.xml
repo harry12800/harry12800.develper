@@ -4,7 +4,7 @@
 	<filePath>src/main/java/${packagePath}/${moduleName}/controller/webdto/${subModuleName}</filePath>
 	<fileName>${ClassName}Dto.java</fileName>
 	<content><![CDATA[/**
- * Copyright &copy; 2015-2020 <a href=" ">harry12800</a> All rights reserved.
+ * Copyright &copy; 2015-2020 <a href="http://www.harry12800.xyz/">harry12800</a> All rights reserved.
  */
 package ${packageName}.${moduleName}.controller.webdto<#if subModuleName != "">.${subModuleName}</#if>;
 
