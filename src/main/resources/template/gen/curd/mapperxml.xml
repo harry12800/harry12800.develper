@@ -31,9 +31,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<include refid="Base_Column_List" />
 			 from ${databaseName}.${table.dbName} where  
 		<choose>
-			<when test='set !=null and set.size()>0'>
+			<when test='ids !=null and ids.size()>0'>
 				<#list table.keyFields as c> ${c.dbName} </#list> in 
-				<foreach item = 'id' index='index' collection='set' open='(' separator=',' close=')'>
+				<foreach item = 'id' index='index' collection='ids' open='(' separator=',' close=')'>
 					${"#"}{id}
 				</foreach>
 			</when>
@@ -82,9 +82,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<delete id='deleteByIds' parameterType='java.util.Set'>
 		delete from ${databaseName}.${table.dbName} where  
 		<choose>
-			<when test='set !=null and set.size()>0'>
+			<when test='ids !=null and ids.size()>0'>
 				<#list table.keyFields as c> ${c.dbName} </#list> in 
-				<foreach item = 'id' index='index' collection='set' open='(' separator=',' close=')'>
+				<foreach item = 'id' index='index' collection='ids' open='(' separator=',' close=')'>
 					${"#"}{id}
 				</foreach>
 			</when>

@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -46,7 +47,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "添加", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity add(@ApiParam @RequestParam ${ClassName} ${className},
+	public ResponseEntity add(@ApiParam @RequestBody ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
 			return ResponseEntity.newBadRequest();
@@ -67,7 +68,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "删除", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@ApiParam @RequestParam ${ClassName} ${className},
+	public ResponseEntity delete(@ApiParam @RequestBody ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
 			return ResponseEntity.newBadRequest();
@@ -88,7 +89,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 
 	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "修改", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity update(@ApiParam @RequestParam ${ClassName} ${className},
+	public ResponseEntity update(@ApiParam @RequestBody ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
 			return ResponseEntity.newBadRequest();
@@ -109,7 +110,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 
 	@RequestMapping(value = "/findById", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity findById(@ApiParam @RequestParam ${ClassName} ${className},
+	public ResponseEntity findById(@ApiParam @RequestBody ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
 			return ResponseEntity.newBadRequest();
@@ -130,7 +131,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 
 	@RequestMapping(value = "/findAll", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity findAll(@ApiParam @RequestParam ${ClassName} ${className},
+	public ResponseEntity findAll(@ApiParam @RequestBody ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
 			return ResponseEntity.newBadRequest();

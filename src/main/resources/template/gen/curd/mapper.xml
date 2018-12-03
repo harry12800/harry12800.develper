@@ -32,7 +32,7 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	* 通过多个id删除多行数据
 	* 字符串ids的样子 eg:  `id in ('a','b')`  数字型的是  `id in (a,b)`
 	*/
-	int deleteByIds(Set<?> ids);
+	int deleteByIds(@Param("ids")Set<?> ids);
 	
 	<#list table.keyFields as c>
 	/**
@@ -50,17 +50,13 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	</#list>	
 	
 	/**
-	* 查询根据字段名称和数据
-	**/
-	List<${ClassName}> findByParam(@Param("propName") String propName,@Param("value") Object value);
-	/**
-	* 删除多行数据
+	* 查询所有数据
 	**/
 	List<${ClassName}> findAll();
 	/**
 	* 查询多行数据
 	**/
-	List<${ClassName}> findByIds(Set<?> set);
+	List<${ClassName}> findByIds(@Param("ids")Set<?> ids);
 	/**
 	* 保存数据
 	*/

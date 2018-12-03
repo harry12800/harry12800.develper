@@ -20,7 +20,7 @@ public class Sample {
 		 * 设置为null 将使用代码里默认的链接
 		 */
 
-		String url = "jdbc:mysql://120.78.177.24:3306/fxchat";
+		String url = "jdbc:mysql://120.78.177.24:3306/scan";
 		String user = "root";
 		String pwd = "Zhouguozhu@123";
 		//203.110.160.90:33899
@@ -34,7 +34,7 @@ public class Sample {
 		 * oracle 的数据库生成数据字典工具
 		 */
 		db = new MysqlHelper();
-		db.generateDescFile(url, user, pwd);
+//		db.generateDescFile(url, user, pwd);
 		//db.generateDescFile(url, user, pwd);
 		//		Map<String, List<String>> a = db.getTableAndColumns(url, user, pwd);
 		//		Set<Entry<String,List<String>>> entrySet = a.entrySet();
@@ -49,7 +49,9 @@ public class Sample {
 		List<DBTable> dbTable = DeveloperUtils.getDBTable(url, user, pwd);
 		for (DBTable table : dbTable) {
 			//			System.out.println(table.getCreateDDL(DBType.MYSQL));
-			System.out.println(table.getCreateCommentDDL(DBType.ORACLE));
+			DeveloperUtils.generateDbEntityByTableNameUseFreemarker("com.aa",
+					"bb", url, user, pwd, "scan", table.getName());
+//			System.out.println(table.getCreateCommentDDL(DBType.ORACLE));
 		}
 	}
 }
