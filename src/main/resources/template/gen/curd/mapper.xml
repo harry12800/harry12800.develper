@@ -40,13 +40,13 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	 * @param id
 	 * @return
 	 */
- 	int deleteById(${c.javaType} ${c.javaName});
+ 	int deleteBy${c.javaFieldName}(${c.javaType} ${c.javaName});
  	/**
 	 * 查找一行数据
 	 * @param id
 	 * @return
 	 */
-	${ClassName} findById(${c.javaType} ${c.javaName});
+	${ClassName} findBy${c.javaFieldName}(${c.javaType} ${c.javaName});
 	</#list>	
 	
 	/**
@@ -70,7 +70,10 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	* 更新数据，通过id 修改所有字段属性
 	*/
 	int update(${ClassName} t);
-	
+	/**
+	* 更新数据，通过id 修改非空字段属性
+	*/
+	int updateNotNull(${ClassName} t);
 }]]>
 	</content>
 

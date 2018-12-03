@@ -20,20 +20,20 @@ public class Sample {
 		 * 设置为null 将使用代码里默认的链接
 		 */
 
-		String url = "jdbc:mysql://192.168.0.109:3306/nytm";
+		String url = "jdbc:mysql://120.78.177.24:3306/fxchat";
 		String user = "root";
-		String pwd = "admin";
+		String pwd = "Zhouguozhu@123";
 		//203.110.160.90:33899
-		url = "jdbc:oracle:thin:@203.110.160.90:1521:orcl";
-		user = "pharm";
-		pwd = "pharm";
-		url = "jdbc:oracle:thin:@192.168.0.70:1521:testdb";
-		user = "pharm19";
-		pwd = "pharm19";
+//		url = "jdbc:oracle:thin:@203.110.160.90:1521:orcl";
+//		user = "pharm";
+//		pwd = "pharm";
+//		url = "jdbc:oracle:thin:@192.168.0.70:1521:testdb";
+//		user = "pharm19";
+//		pwd = "pharm19";
 		/**
 		 * oracle 的数据库生成数据字典工具
 		 */
-		db = new OracleHelper();
+		db = new MysqlHelper();
 		db.generateDescFile(url, user, pwd);
 		//db.generateDescFile(url, user, pwd);
 		//		Map<String, List<String>> a = db.getTableAndColumns(url, user, pwd);
