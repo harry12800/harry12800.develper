@@ -10,29 +10,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="${packageName}.${moduleName}.mapper.${ClassName}Mapper">
 	<sql id="Base_Column_List">
 		<#list table.keyFields as c> ${c.dbName},</#list> 
-			<#list table.fields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list> 
+		<#list table.fields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list> 
 	</sql>
+	<select id='findAll' resultMap='${ClassName}' >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ${databaseName}.${table.dbName}
+	</select>
 	<#list table.keyFields as c1>
 	<select id='findBy${c1.javaFieldName}' resultMap='${ClassName}'  parameterType='${c1.javaCompleteType}'>
-		select 
-			<include refid="Base_Column_List" />
-			 from ${databaseName}.${table.dbName} 
-			 where ${c1.dbName} = ${"#"}{value}
+		SELECT 
+		<include refid="Base_Column_List" />
+		FROM ${databaseName}.${table.dbName} 
+		WHERE ${c1.dbName} = ${"#"}{value}
 	</select>
 	</#list>	
-	
-	<select id='findAll' resultMap='${ClassName}' >
-		select
-			<include refid="Base_Column_List" />
-			 from ${databaseName}.${table.dbName}
-	</select>
 	<select id='findByIds' parameterType='java.util.Set'>
-		select
-			<include refid="Base_Column_List" />
-			 from ${databaseName}.${table.dbName} where  
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ${databaseName}.${table.dbName} WHERE  
 		<choose>
 			<when test='ids !=null and ids.size()>0'>
-				<#list table.keyFields as c> ${c.dbName} </#list> in 
+				<#list table.keyFields as c> ${c.dbName} </#list> IN 
 				<foreach item = 'id' index='index' collection='ids' open='(' separator=',' close=')'>
 					${"#"}{id}
 				</foreach>
@@ -43,47 +42,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</choose>
 	</select>
 	<insert id='save' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
-		insert into ${databaseName}.${table.dbName}(
-		<#list table.fields as c> <#if c_has_next>${c.dbName},</#if> <#if !c_has_next>${c.dbName}</#if></#list>)
-		values(<#list table.fields as c><#if c_has_next>${"#"}{${c.javaName}},</#if><#if !c_has_next>${"#"}{${c.javaName}}</#if>
+		INSERT INTO ${databaseName}.${table.dbName}(
+		<#list table.allFields as c> <#if c_has_next>${c.dbName},</#if> <#if !c_has_next>${c.dbName}</#if></#list>)
+		VALUES(<#list table.allFields as c><#if c_has_next>${"#"}{${c.javaName}},</#if><#if !c_has_next>${"#"}{${c.javaName}}</#if>
 		</#list>)
 	</insert>
 	<update id='update' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
-		update ${databaseName}.${table.dbName} set
+		UPDATE ${databaseName}.${table.dbName} SET
 		<#list table.fields as c>
 		 <#if c_has_next>${c.dbName}=${"#"}{${c.javaName}},</#if>
 		 <#if !c_has_next>${c.dbName}=${"#"}{${c.javaName}}</#if></#list>
-		 where id=${"#"}{id}
+		 WHERE id=${"#"}{id}
 	</update>
 	<update id='updateNotNull' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
-		update ${databaseName}.${table.dbName} 
-			<trim prefix="SET" suffixOverrides=",">
+		UPDATE ${databaseName}.${table.dbName} 
+		<trim prefix="SET" suffixOverrides=",">
 		<#list table.fields as c>
-		 	<if test="null != ${c.javaName}">
-		 	${c.dbName}=${"#"}{${c.javaName}},
+		 	<if test='null != ${c.javaName}'>
+		 		${c.dbName}=${"#"}{${c.javaName}},
 		 	</if>
 		 	</#list>
 		 </trim>
-		 
-		 where 
-		 <#list table.keyFields as c1>
-		 <trim prefix="" suffixOverrides=" AND ">
-			${c1.dbName}=${"#"}{${c1.javaName}}
-			 </trim>
+		 WHERE 
+		<trim prefix="" suffixOverrides=" AND ">
+		<#list table.keyFields as c1>
+			<if test='1 == 1'>
+				${c1.dbName}=${"#"}{${c1.javaName}}
+			</if>
 		 </#list>
-		 
+		</trim>
 	</update>
 	<#list table.keyFields as c1>
 	<delete id='deleteBy${c1.javaFieldName}' parameterType='${c1.javaCompleteType}'>
-		delete from ${databaseName}.${table.dbName} where  ${c1.dbName} = ${"#"}{value}
+		DELETE FROM ${databaseName}.${table.dbName} WHERE  ${c1.dbName} = ${"#"}{value}
 	</delete>
 	</#list>
 	<!-- ${"#"}{value} -->
 	<delete id='deleteByIds' parameterType='java.util.Set'>
-		delete from ${databaseName}.${table.dbName} where  
+		DELETE FROM ${databaseName}.${table.dbName} WHERE  
 		<choose>
 			<when test='ids !=null and ids.size()>0'>
-				<#list table.keyFields as c> ${c.dbName} </#list> in 
+				<#list table.keyFields as c> ${c.dbName} </#list> IN 
 				<foreach item = 'id' index='index' collection='ids' open='(' separator=',' close=')'>
 					${"#"}{id}
 				</foreach>

@@ -2,10 +2,6 @@ package cn.harry12800.develper.sample;
 
 import java.util.List;
 
-import cn.harry12800.dbhelper.DBType;
-import cn.harry12800.dbhelper.Db;
-import cn.harry12800.dbhelper.MysqlHelper;
-import cn.harry12800.dbhelper.OracleHelper;
 import cn.harry12800.dbhelper.entity.DBTable;
 import cn.harry12800.developer.DeveloperUtils;
 
@@ -15,12 +11,11 @@ public class Sample {
 		/**
 		 * Mysql的数据库生成数据字典工具
 		 */
-		Db db = new MysqlHelper();
 		/**
 		 * 设置为null 将使用代码里默认的链接
 		 */
 
-		String url = "jdbc:mysql://120.78.177.24:3306/scan";
+		String url = "jdbc:mysql://120.78.177.24:3306/docs";
 		String user = "root";
 		String pwd = "Zhouguozhu@123";
 		//203.110.160.90:33899
@@ -33,7 +28,6 @@ public class Sample {
 		/**
 		 * oracle 的数据库生成数据字典工具
 		 */
-		db = new MysqlHelper();
 //		db.generateDescFile(url, user, pwd);
 		//db.generateDescFile(url, user, pwd);
 		//		Map<String, List<String>> a = db.getTableAndColumns(url, user, pwd);
@@ -50,7 +44,7 @@ public class Sample {
 		for (DBTable table : dbTable) {
 			//			System.out.println(table.getCreateDDL(DBType.MYSQL));
 			DeveloperUtils.generateDbEntityByTableNameUseFreemarker("com.aa",
-					"bb", url, user, pwd, "scan", table.getName());
+					"bb", url, user, pwd, "docs", table.getName());
 //			System.out.println(table.getCreateCommentDDL(DBType.ORACLE));
 		}
 	}

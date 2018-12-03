@@ -17,6 +17,7 @@ public class Table {
 	private String tbDesc;
 	LinkedHashSet<Field> fields = new LinkedHashSet<Field>();
 	LinkedHashSet<Field> keyFields = new LinkedHashSet<Field>();
+	LinkedHashSet<Field> allFields = new LinkedHashSet<Field>();
 
 	public Table(DBTable table) {
 		this.dbName = table.getName();
@@ -41,6 +42,7 @@ public class Table {
 			else{
 				this.fields.add(field);
 			}
+			this.allFields.add(field);
 		}
 	}
 
@@ -50,6 +52,14 @@ public class Table {
 
 	public void setKeyFields(LinkedHashSet<Field> keyFields) {
 		this.keyFields = keyFields;
+	}
+
+	public LinkedHashSet<Field> getAllFields() {
+		return allFields;
+	}
+
+	public void setAllFields(LinkedHashSet<Field> allFields) {
+		this.allFields = allFields;
 	}
 
 	/**
