@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.hnlens.http.ResponseEntity;
+import ${packageName}.http.ResponseEntity;
 
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
