@@ -26,7 +26,6 @@ import cn.harry12800.dbhelper.Db;
 import cn.harry12800.dbhelper.MysqlHelper;
 import cn.harry12800.dbhelper.OracleHelper;
 import cn.harry12800.dbhelper.entity.DBTable;
-import cn.harry12800.developer.DeveloperUtils.Builder;
 import cn.harry12800.tools.EntityMent;
 import cn.harry12800.tools.FileUtils;
 import cn.harry12800.tools.MachineUtils;
@@ -718,6 +717,49 @@ public class DeveloperUtils {
 			for (DBTable table : tableDetail) {
 				if (!table.getName().equalsIgnoreCase(tableName))
 					continue;
+				CurdData curdData = createCurdData(table);
+				curdData.packageName = basePackage;
+				curdData.packagePath = basePackage.replaceAll("[.]", "/");
+				curdData.moduleName = moduleName;
+				curdData.databaseName = databaseName;
+				curdData.classDescList.add(url);
+				curdData.classDescList.add(user);
+				curdData.classDescList.add(pwd);
+				curdData.classDescList.add("代码自动生成!数据库的资源文件.");
+				GenEntity.gen(curdData);
+				GenDao.gen(curdData);
+				GenController.gen(curdData);
+				GenService.gen(curdData);
+				GenMybatisXml.gen(curdData);
+				GenView.gen(curdData);
+				GenWebDto.gen(curdData);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 根据模板生成java文件。entity，dao，service，web。mapper.xml;
+	 * @param url
+	 * @param user
+	 * @param pwd
+	 * @param tableName
+	 */
+	public static void generateAllDbEntityByTableNameUseFreemarker(String basePackage,
+			String moduleName,
+			String url,
+			String user,
+			String pwd,
+			String databaseName) {
+		Db db;
+		if (url.contains("mysql")) {
+			db = new MysqlHelper();
+		} else
+			db = new OracleHelper();
+		List<DBTable> tableDetail = null;
+		try {
+			tableDetail = db.getTableDetail(url, user, pwd);
+			for (DBTable table : tableDetail) {
 				CurdData curdData = createCurdData(table);
 				curdData.packageName = basePackage;
 				curdData.packagePath = basePackage.replaceAll("[.]", "/");
