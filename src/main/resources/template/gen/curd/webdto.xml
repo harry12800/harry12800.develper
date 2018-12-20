@@ -9,7 +9,7 @@
 package ${packageName}.${moduleName}.controller.webdto<#if subModuleName != "">.${subModuleName}</#if>;
 
 
-import com.hnlens.${moduleName}.entity.${ClassName};
+import ${packageName}.${moduleName}.entity.${ClassName};
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
