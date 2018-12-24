@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>entity</name>
+	<filePath>src/main/java/${packagePath}/${moduleName}/entity/${subModuleName}</filePath>
+	<fileName>${ClassName}.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href="http://www.harry12800.xyz/">harry12800</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>;
+
+<#list importList as i>
+import ${i};
+</#list>
+//import cn.harry12800.tools.DbField;
+//import cn.harry12800.tools.DbInitSentence;
+//import cn.harry12800.tools.DbInitType;
+//import cn.harry12800.tools.DbTable;
+/**
+ * ${functionName}Entity
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ <#list classDescList as c>
+ * <dt>${c}
+ </#list>
+ */
+//@DbTable(tableName = "${table.dbName}")
+public class ${ClassName} { // extends DataEntity<${ClassName}> {
+//	private static final long serialVersionUID = 1L;
+
+	<#list table.keyFields as c>
+	/**
+	 * ${c.comments}
+	 */
+//	${c.tableFieldAnno}
+ 	private ${c.javaType}	${c.javaName};
+	</#list>	
+	<#list table.fields as c>
+	/**
+	 * ${c.comments}
+	 */
+//	${c.tableFieldAnno}
+ 	private ${c.javaType}	${c.javaName};
+	</#list>
+//	@DbInitSentence(type = DbInitType.Create)
+	public static String initSql="${table.createSql}";
+//	@DbInitSentence(type = DbInitType.Create)
+	public static String initOracleSql="${table.createOracleSql}";
+	
+	
+	<#list table.keyFields as c>
+	/**
+	 *获取${c.comments}
+	 */
+ 	public  ${c.javaType}	get${c.javaFieldName}() {
+ 		return ${c.javaName};
+ 	}
+	</#list>
+	
+	<#list table.keyFields as c>
+	/**
+	 * 设值${c.comments}
+	 */
+ 	public void	set${c.javaFieldName}(${c.javaType} ${c.javaName}) {
+ 		this.${c.javaName} = ${c.javaName};
+ 	}
+	</#list>
+	
+	
+	
+	<#list table.fields as c>
+	/**
+	 *获取${c.comments}
+	 */
+ 	public  ${c.javaType}	get${c.javaFieldName}() {
+ 		return ${c.javaName};
+ 	}
+	</#list>
+	
+	<#list table.fields as c>
+	/**
+	 * 设值${c.comments}
+	 */
+ 	public void	set${c.javaFieldName}(${c.javaType} ${c.javaName}) {
+ 		this.${c.javaName} = ${c.javaName};
+ 	}
+	</#list>
+}]]>
+	</content>
+</template>

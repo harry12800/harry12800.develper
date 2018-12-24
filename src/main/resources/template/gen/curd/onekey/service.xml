@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packagePath}/${moduleName}/service/${subModuleName}</filePath>
+	<fileName>${ClassName}Service.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href="http://www.harry12800.xyz/">harry12800</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+import java.util.Set;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+//import org.springframework.transaction.annotation.Transactional;
+ 
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Mapper;
+
+/**
+ * ${functionName}Service
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+@Component
+//@Transactional(readOnly = true)
+public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
+
+	@Autowired
+	${ClassName}Mapper mapper;
+	
+	 
+	public List<${ClassName}> findAll() {
+		return mapper.findAll();
+	}
+	public List<${ClassName}> findByIds(Set<?> set){
+		return mapper.findByIds(set);
+	}
+	
+	public int save(${ClassName} t){
+		return mapper.save(t);
+	}
+	public int update(${ClassName} t){
+		return mapper.update(t);
+	}
+	 
+	public int deleteByIds(Set<?> set){
+		return mapper.deleteByIds(set);
+	}
+	 
+}]]>
+	</content>
+</template>

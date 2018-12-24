@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>service</name>
+	<filePath>src/main/java/${packagePath}/${moduleName}/controller/${subModuleName}</filePath>
+	<fileName>${ClassName}Controller.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href="http://www.harry12800.xyz/">harry12800</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.controller<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ${packageName}.${moduleName}.http.ResponseEntity;
+
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
+import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Mapper;
+
+/**
+ * ${functionName}Controller
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ */
+//@Transactional(readOnly = true)
+@SuppressWarnings("unused")
+@RestController
+@RequestMapping("/v1/${moduleName}/${className}")
+public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
+
+	private static final String API_TAGS = "${dbDesc}/${ClassName}Controller";
+
+	@Autowired
+	${ClassName}Mapper mapper;
+
+	@RequestMapping(value = "/add", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "添加", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity add(@ApiParam @RequestBody ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.save(${className});
+			r.setContent(new Object() {
+				public int result = save;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+	<#list table.keyFields as c>
+ 	/**
+	 * 查找一行数据
+	 * @param id
+	 * @return
+	 */
+	@RequestMapping(value = "/findBy${c.javaFieldName}", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity findBy${c.javaFieldName}(@ApiParam @RequestBody ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			${ClassName} findById = mapper.findBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
+			r.setContent(new Object() {
+				public ${ClassName} ${className} = findById;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+	/**
+	 * 删除单行数据 ${c.comments}
+	 * @param id
+	 * @return
+	 */
+ 	@RequestMapping(value = "/deleteBy${c.javaFieldName}", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "删除", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity deleteBy${c.javaFieldName}(@ApiParam @RequestBody ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.deleteBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
+			r.setContent(new Object() {
+				public int result = save;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+ 	
+	</#list>
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "修改", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity update(@ApiParam @RequestBody ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.update(${className});
+			r.setContent(new Object() {
+				public int result = save;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+
+	@RequestMapping(value = "/findAll", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity findAll(@ApiParam @RequestBody ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			List<${ClassName}> findAll = mapper.findAll();
+			r.setContent(new Object() {
+				public List<${ClassName}> lists = findAll;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+}]]>
+	</content>
+</template>

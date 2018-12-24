@@ -770,12 +770,14 @@ public class DeveloperUtils {
 				curdData.classDescList.add(pwd);
 				curdData.classDescList.add("代码自动生成!数据库的资源文件.");
 				GenEntity.gen(curdData);
-				GenDao.gen(curdData);
-				GenController.gen(curdData);
-				GenService.gen(curdData);
-				GenMybatisXml.gen(curdData);
-				GenView.gen(curdData);
-				GenWebDto.gen(curdData);
+				if(curdData.table.keyFields.size() == 1){
+					GenDao.gen(curdData);
+					GenController.gen(curdData);
+					GenService.gen(curdData);
+					GenMybatisXml.gen(curdData);
+					GenView.gen(curdData);
+					GenWebDto.gen(curdData);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

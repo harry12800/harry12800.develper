@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template>
+	<name>entity</name>
+	<filePath>src/main/java/${packagePath}/${moduleName}/mapper/${subModuleName}</filePath>
+	<fileName>${ClassName}Mapper.java</fileName>
+	<content><![CDATA[/**
+ * Copyright &copy; 2015-2020 <a href="http://www.harry12800.xyz/">harry12800</a> All rights reserved.
+ */
+package ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>;
+
+import java.util.List;
+import java.util.Set;
+
+import org.apache.ibatis.annotations.Param;
+import ${packageName}.${moduleName}.entity.${ClassName};
+<#list importList as i>
+import ${i};
+</#list>
+/**
+ * ${functionName}Mapper
+ * @author ${functionAuthor}
+ * @version ${functionVersion}
+ <#list classDescList as c>
+ * <dt>${c}
+ </#list>
+ */
+
+public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
+	static final long serialVersionUID = 1L;
+	
+	/**
+	* 查询所有数据
+	**/
+	List<${ClassName}> findAll();
+	<#list table.keyFields as c>
+ 	/**
+	 * 查找一行数据
+	 * @param id
+	 * @return
+	 */
+	${ClassName} findBy${c.javaFieldName}(${c.javaType} ${c.javaName});
+	
+	/**
+	 * 删除单行数据 ${c.comments}
+	 * @param id
+	 * @return
+	 */
+ 	int deleteBy${c.javaFieldName}(${c.javaType} ${c.javaName});
+	</#list>	
+	
+	/**
+	* 查询多行数据
+	**/
+	List<${ClassName}> findByIds(@Param("ids")Set<?> ids);
+	/**
+	* 保存数据
+	*/
+	int save(${ClassName} t);
+
+	/**
+	* 更新数据，通过id 修改所有字段属性
+	*/
+	int update(${ClassName} t);
+	/**
+	* 更新数据，通过id 修改非空字段属性
+	*/
+	int updateNotNull(${ClassName} t);
+	
+	/**
+	* 通过多个id删除多行数据
+	* 字符串ids的样子 eg:  `id in ('a','b')`  数字型的是  `id in (a,b)`
+	*/
+	int deleteByIds(@Param("ids")Set<?> ids);
+}]]>
+	</content>
+
+</template>
