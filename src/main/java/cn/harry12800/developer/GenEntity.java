@@ -26,21 +26,9 @@ public class GenEntity {
 
 		Configuration cfg = Configuration.getDefaultConfiguration();
 		if (jarOrFile) {
-			if(curdData.table.keyFields.size()==0)
-				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd");
-			else if(curdData.table.keyFields.size()==1){
-				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd/onekey");
-			}else {
-				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd/manykey");
-			}
+			cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd");
 		} else {
-			if(curdData.table.keyFields.size()==0)
-				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd"));
-			else if(curdData.table.keyFields.size()==1){
-				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd/onekey"));
-			}else{
-				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd/manykey"));
-			}
+			cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd"));
 		}
 		Template t1 = cfg.getTemplate(ftl);
 		StringWriter out = new StringWriter();

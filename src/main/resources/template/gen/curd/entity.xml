@@ -84,6 +84,9 @@ public class ${ClassName} { // extends DataEntity<${ClassName}> {
  		this.${c.javaName} = ${c.javaName};
  	}
 	</#list>
+	public String toString() {
+		return "${ClassName} ["+<#list table.fields as c>"${c.javaName}="${c.javaName}+"," </#list>+"]";
+	}
 }]]>
 	</content>
 </template>
