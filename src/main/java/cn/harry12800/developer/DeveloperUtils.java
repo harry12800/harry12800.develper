@@ -8,6 +8,7 @@ import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -39,22 +40,22 @@ import cn.harry12800.tools.XmlUtils;
  */
 public class DeveloperUtils {
 	public static void main1(String[] args) throws Exception {
-		//DeveloperUtils.clearAnnotation("F:/Workspaces/pssm/src");
-		//		String url = "jdbc:mysql://127.0.0.1:3306/nytm";
-		//		String user = "root";
-		//		String password = "admin";
+		// DeveloperUtils.clearAnnotation("F:/Workspaces/pssm/src");
+		// String url = "jdbc:mysql://127.0.0.1:3306/nytm";
+		// String user = "root";
+		// String password = "admin";
 		String url = "jdbc:oracle:thin:@192.168.10.110:1521:orcl";
 		String user = "nytm";
 		String password = "nytm";
 		List<DBTable> dbTable = DeveloperUtils.getDBTable(url, user, password);
 		for (DBTable table : dbTable) {
 			System.out.println(table.getCreateDDL(DBType.MYSQL));
-			//	System.out.println(table.getCreateCommentDDL(DBType.MYSQL));
+			// System.out.println(table.getCreateCommentDDL(DBType.MYSQL));
 		}
 	}
 
 	/**
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static List<DBTable> getDBTable(String url, String userName, String pwd) throws Exception {
 		OracleHelper oracleHelper = new OracleHelper();
@@ -78,8 +79,7 @@ public class DeveloperUtils {
 	static {
 		workSpacePath = MachineUtils.getWorkSpacePath();
 		projectPath = MachineUtils.getProjectPath();
-		projectName = projectPath.substring(workSpacePath.length() + 1,
-				projectPath.length());
+		projectName = projectPath.substring(workSpacePath.length() + 1, projectPath.length());
 	}
 
 	public static String getProjectName() {
@@ -88,14 +88,15 @@ public class DeveloperUtils {
 
 	/**
 	 * 获得项目的输出路径
-	 * @param projectPath 项目路径
+	 * 
+	 * @param projectPath
+	 *            项目路径
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	static String getProjectOutputPath(String projectPath) throws Exception {
 		try {
-			List<String> output = XmlUtils.getNodeAttrValues(projectPath
-					+ File.separator + ".classpath",
+			List<String> output = XmlUtils.getNodeAttrValues(projectPath + File.separator + ".classpath",
 					"//classpathentry[@kind='output']", "path");
 			for (String string : output) {
 				return projectPath + File.separator + string;
@@ -114,15 +115,12 @@ public class DeveloperUtils {
 	 * @return
 	 * @throws Exception
 	 */
-	public static boolean deployClass(String path, Class<?>... clazz)
-			throws Exception {
+	public static boolean deployClass(String path, Class<?>... clazz) throws Exception {
 		List<String> filename = DeveloperUtils.findProjectOutputPath(clazz);
 		for (int i = 0; i < clazz.length; i++) {
-			String packageName = clazz[i].getPackage().getName()
-					.replaceAll("[.]", "/");// 把类名换成路径名
+			String packageName = clazz[i].getPackage().getName().replaceAll("[.]", "/");// 把类名换成路径名
 			// System.out.println(packageName);
-			String dirPath = new File(path).getAbsolutePath() + File.separator
-					+ packageName;
+			String dirPath = new File(path).getAbsolutePath() + File.separator + packageName;
 			System.out.println(dirPath);
 			FileUtils.moveFile(filename.get(i), dirPath);
 		}
@@ -139,8 +137,7 @@ public class DeveloperUtils {
 	 * @param row
 	 * @return
 	 */
-	public static boolean shiftCode(Class<?> src, Class<?> des, int startRow,
-			int endRow, int row) {
+	public static boolean shiftCode(Class<?> src, Class<?> des, int startRow, int endRow, int row) {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
 		String srcName = src.getName();
 		srcName = srcName.replaceAll("[.]", "/");// 把类名换成路径名
@@ -163,8 +160,7 @@ public class DeveloperUtils {
 		for (String path : projectSourcePath) {
 			File file = new File(path + desName + ".java");
 			if (file.exists()) {
-				FileUtils.appendContent(file.getAbsolutePath(),
-						rowByFile.toString(), row);
+				FileUtils.appendContent(file.getAbsolutePath(), rowByFile.toString(), row);
 				return true;
 			}
 		}
@@ -180,8 +176,7 @@ public class DeveloperUtils {
 	 * @param endRow
 	 * @return
 	 */
-	public static boolean shiftCode(Class<?> src, Class<?> des, int startRow,
-			int endRow) {
+	public static boolean shiftCode(Class<?> src, Class<?> des, int startRow, int endRow) {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
 		String srcName = src.getName();
 		srcName = srcName.replaceAll("[.]", "/");// 把类名换成路径名
@@ -236,10 +231,9 @@ public class DeveloperUtils {
 	 * @param row
 	 * @param sql
 	 * @param isEllipsis
-	 * @throws Exception 
+	 * @throws Exception
 	 */
-	public static void generateSqlDataCode(Class<?> c, int row, String sql,
-			boolean isEllipsis) throws Exception {
+	public static void generateSqlDataCode(Class<?> c, int row, String sql, boolean isEllipsis) throws Exception {
 		// 得到全类名
 		String name = c.getName();
 		System.out.println(name);
@@ -262,8 +256,7 @@ public class DeveloperUtils {
 		for (String path : projectSourcePath) {
 			File file = new File(path + name + ".java");
 			if (file.exists()) {
-				FileUtils.appendContent(file.getAbsolutePath(), sb.toString(),
-						row);
+				FileUtils.appendContent(file.getAbsolutePath(), sb.toString(), row);
 			}
 		}
 	}
@@ -277,8 +270,7 @@ public class DeveloperUtils {
 	 * @param startRow
 	 * @param endRow
 	 */
-	public static void generateCodeSuffixPrefix(Class<?> c, String prefix,
-			String suffix, int startRow, int endRow) {
+	public static void generateCodeSuffixPrefix(Class<?> c, String prefix, String suffix, int startRow, int endRow) {
 		// 得到全类名
 		String name = c.getName();
 		System.out.println(name);
@@ -289,8 +281,7 @@ public class DeveloperUtils {
 		for (String path : projectSourcePath) {
 			File file = new File(path + name + ".java");
 			if (file.exists()) {
-				FileUtils.modifyLineContent(file.getAbsolutePath(), prefix,
-						suffix, startRow, endRow);
+				FileUtils.modifyLineContent(file.getAbsolutePath(), prefix, suffix, startRow, endRow);
 			}
 		}
 	}
@@ -298,9 +289,12 @@ public class DeveloperUtils {
 	/**
 	 * <p>
 	 * 给某一个java文件中的<code>pageRow<code>行,增加代码段
-	 * <p>传入的map进行枚举,生成的代码如下
-	 * <p><code> diyMap.put("122", 12.0);
-	 * <p><code> diyMap.put("122",12.0);
+	 * <p>
+	 * 传入的map进行枚举,生成的代码如下
+	 * <p>
+	 * <code> diyMap.put("122", 12.0);
+	 * <p>
+	 * <code> diyMap.put("122",12.0);
 	 * 
 	 * @param map
 	 *            需要被枚举的Map
@@ -311,8 +305,7 @@ public class DeveloperUtils {
 	 * @param pageRow
 	 *            第几行
 	 */
-	public static void generateMapCode(Map<?, ?> map, Class<?> c,
-			String mapName, int pageRow) {
+	public static void generateMapCode(Map<?, ?> map, Class<?> c, String mapName, int pageRow) {
 		// 得到全类名
 		String name = c.getName();
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
@@ -340,8 +333,7 @@ public class DeveloperUtils {
 			for (String path : projectSourcePath) {
 				File file = new File(path + name + ".java");
 				if (file.exists()) {
-					FileUtils.appendContent(file.getAbsolutePath(),
-							sb.toString(), pageRow);
+					FileUtils.appendContent(file.getAbsolutePath(), sb.toString(), pageRow);
 				}
 			}
 		}
@@ -350,7 +342,9 @@ public class DeveloperUtils {
 
 	/**
 	 * 移除该目录下的java文件中的注解/* 和//
-	 * @param dirPath   文件夹路径
+	 * 
+	 * @param dirPath
+	 *            文件夹路径
 	 */
 	public static void clearAnnotation(String dirPath) {
 		File file = new File(dirPath);
@@ -363,14 +357,12 @@ public class DeveloperUtils {
 					f.add(fi);
 				else if (fi.isFile()) {
 					if (fi.getName().endsWith(".java")) {
-						String content = FileUtils.getSrcByFilePath(fi
-								.getAbsolutePath());
+						String content = FileUtils.getSrcByFilePath(fi.getAbsolutePath());
 						if (content.contains("native")) {
 							System.out.println(fi.getName());
 							continue;
 						}
-						content = content.replaceAll("/\\*{1,2}[\\s\\S]*?\\*/",
-								"").replaceAll("//[\\s\\S]*?\n", "");
+						content = content.replaceAll("/\\*{1,2}[\\s\\S]*?\\*/", "").replaceAll("//[\\s\\S]*?\n", "");
 						FileUtils.writeText(fi.getAbsolutePath(), content);
 						// System.out.println(content);
 					}
@@ -382,12 +374,12 @@ public class DeveloperUtils {
 
 	/**
 	 * 查看哪些类没有注解自己的身份
+	 * 
 	 * @param dirPath
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static void notifyAddAnnotation(String dirPath)
-			throws ClassNotFoundException, IOException {
+	public static void notifyAddAnnotation(String dirPath) throws ClassNotFoundException, IOException {
 		File file = new File(dirPath);
 		List<File> f = new ArrayList<File>(0);
 		f.add(file);
@@ -399,8 +391,7 @@ public class DeveloperUtils {
 					f.add(fi);
 				else if (fi.isFile()) {
 					if (fi.getName().endsWith(".java")) {
-						String content = FileUtils.getSrcByFilePath(fi
-								.getAbsolutePath());
+						String content = FileUtils.getSrcByFilePath(fi.getAbsolutePath());
 						Pattern p = Pattern.compile("@author ");
 						Matcher m = p.matcher(content);
 						if (!m.find()) {
@@ -420,8 +411,7 @@ public class DeveloperUtils {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public static void generateGetSet(String dirPath)
-			throws ClassNotFoundException, IOException {
+	public static void generateGetSet(String dirPath) throws ClassNotFoundException, IOException {
 		File file = new File(dirPath);
 		List<File> f = new ArrayList<File>(0);
 		f.add(file);
@@ -451,8 +441,7 @@ public class DeveloperUtils {
 		String content = FileUtils.getSrcByFilePath(fi.getAbsolutePath());
 		for (int i = 0; i < tt.size(); i++) {
 			String[] str = tt.get(i).split("-");
-			Pattern p = Pattern.compile("(/\\*{1,2}[\\s\\S]*?\\*/)[\\s\\S]*?"
-					+ str[0] + " " + str[1]);
+			Pattern p = Pattern.compile("(/\\*{1,2}[\\s\\S]*?\\*/)[\\s\\S]*?" + str[0] + " " + str[1]);
 			Matcher m = p.matcher(content);
 			if (m.find()) {
 			}
@@ -468,18 +457,15 @@ public class DeveloperUtils {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	private static List<String> resolveJavaFile(File fi)
-			throws ClassNotFoundException, IOException {
+	private static List<String> resolveJavaFile(File fi) throws ClassNotFoundException, IOException {
 		String content = FileUtils.getSrcByFilePath(fi.getAbsolutePath());
 		String simpleName = fi.getName().replace(".java", "");
 		String className = getClassNameBySrc(content) + "." + simpleName;
 		System.out.println("分析类:" + simpleName);
 		JavaCompiler jc = ToolProvider.getSystemJavaCompiler();
 
-		StandardJavaFileManager manager = jc.getStandardFileManager(null, null,
-				null);
-		Iterable<? extends JavaFileObject> it = manager.getJavaFileObjects(fi
-				.getAbsoluteFile());
+		StandardJavaFileManager manager = jc.getStandardFileManager(null, null, null);
+		Iterable<? extends JavaFileObject> it = manager.getJavaFileObjects(fi.getAbsoluteFile());
 		CompilationTask t = jc.getTask(null, manager, null, null, null, it);
 		t.call();
 		manager.close();
@@ -503,6 +489,7 @@ public class DeveloperUtils {
 
 	/***
 	 * 得到类全名
+	 * 
 	 * @param javaCode
 	 *            java文件的字符串内容
 	 * @return
@@ -528,8 +515,7 @@ public class DeveloperUtils {
 	 * @param pwd
 	 *            数据库实例密码
 	 */
-	public static void generateDbUtils(String packageName, String url,
-			String user, String pwd) {
+	public static void generateDbUtils(String packageName, String url, String user, String pwd) {
 		Db db = new OracleHelper();
 		Map<String, List<String>> map = null;
 		Map<String, String> comments = null;
@@ -552,8 +538,7 @@ public class DeveloperUtils {
 			content.deleteCharAt(content.length() - 1).append("\";\r\n");
 			content = addAttrAnnotation(content, comments.get(str));
 
-			content.append("\tpublic static final String ").append(str)
-					.append("=\"");
+			content.append("\tpublic static final String ").append(str).append("=\"");
 			for (String col : map.get(str)) {
 				content.append(col).append(",");
 			}
@@ -562,8 +547,8 @@ public class DeveloperUtils {
 		}
 		content.append("}");
 		packageName = packageName.replaceAll("[.]", "/");
-		FileUtils.writeContent(System.getProperty("user.dir") + "/src/"
-				+ packageName + "/DBResource.java", content.toString());
+		FileUtils.writeContent(System.getProperty("user.dir") + "/src/" + packageName + "/DBResource.java",
+				content.toString());
 	}
 
 	/**
@@ -597,8 +582,7 @@ public class DeveloperUtils {
 	 * @param text
 	 * @return
 	 */
-	public static StringBuilder addClassAnnotation(StringBuilder str,
-			String... text) {
+	public static StringBuilder addClassAnnotation(StringBuilder str, String... text) {
 		if (StringUtils.isNull(text)) {
 			str.append("\r\n");
 			return str;
@@ -627,7 +611,16 @@ public class DeveloperUtils {
 		String user;
 		String pwd;
 		String tableName;
+		LinkedHashSet<String> tableNameSet;
 		String databaseName;
+		boolean isAllTable = true;
+
+		boolean needEntity = true;
+		boolean needMapper = true;
+		boolean needMapperxml = true;
+		boolean needService = true;
+		boolean needJ2seview = false;
+		boolean needController = true;
 
 		public Builder setBasePackage(String basePackage) {
 			this.basePackage = basePackage;
@@ -661,9 +654,45 @@ public class DeveloperUtils {
 
 		public void build() {
 			String[] split = tableName.split(",");
-			for (String tableName : split) {
-				generateDbEntityByTableNameUseFreemarker(basePackage, moduleName, url, user, pwd,databaseName, tableName);
+			if (isAllTable) {
+				generateAllDbEntityByTableNameUseFreemarker(this);
+			} else {
+				tableNameSet = new LinkedHashSet<String>();
+				for (String tableName : split) {
+					tableNameSet.add(tableName);
+				}
+				generateDbEntityByTableNameUseFreemarker(this);
 			}
+		}
+
+		public Builder setNeedEntity(boolean needEntity) {
+			this.needEntity = needEntity;
+			return this;
+		}
+
+		public Builder setNeedMapper(boolean needMapper) {
+			this.needMapper = needMapper;
+			return this;
+		}
+
+		public Builder setNeedMapperxml(boolean needMapperxml) {
+			this.needMapperxml = needMapperxml;
+			return this;
+		}
+
+		public Builder setNeedService(boolean needService) {
+			this.needService = needService;
+			return this;
+		}
+
+		public Builder setNeedJ2seview(boolean needJ2seview) {
+			this.needJ2seview = needJ2seview;
+			return this;
+		}
+
+		public Builder setNeedController(boolean needController) {
+			this.needController = needController;
+			return this;
 		}
 
 		public Builder setDatabaseName(String databaseName) {
@@ -671,116 +700,95 @@ public class DeveloperUtils {
 			return this;
 		}
 	}
-	public static void generateDescFile(
-			String url,
-			String user,
-			String pwd
-			) {
+
+	public static void generateDescFile(String url, String user, String pwd) {
 		Db db;
 		if (url.contains("mysql")) {
 			db = new MysqlHelper();
 		} else
 			db = new OracleHelper();
 		try {
-			db.generateDescFile(url, user, pwd, getProjectPath()+"/src/main/resources/");
+			db.generateDescFile(url, user, pwd, getProjectPath() + "/src/main/resources/");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 	public static String getProjectPath() {
 		String workspace = System.getProperty("user.dir");
 		workspace = workspace.replaceAll("\\\\", "/");
 		return workspace;
 	}
+
 	/**
 	 * 根据模板生成java文件。entity，dao，service，web。mapper.xml;
+	 * 
 	 * @param url
 	 * @param user
 	 * @param pwd
 	 * @param tableName
 	 */
-	public static void generateDbEntityByTableNameUseFreemarker(String basePackage,
-			String moduleName,
-			String url,
-			String user,
-			String pwd,
-			String databaseName,
-			String tableName) {
+	public static void generateDbEntityByTableNameUseFreemarker(Builder build) {
 		Db db;
-		if (url.contains("mysql")) {
+		if (build.url.contains("mysql")) {
 			db = new MysqlHelper();
 		} else
 			db = new OracleHelper();
 		List<DBTable> tableDetail = null;
 		try {
-			tableDetail = db.getTableDetail(url, user, pwd);
+			tableDetail = db.getTableDetail(build.url, build.user, build.pwd);
 			for (DBTable table : tableDetail) {
-				if (!table.getName().equalsIgnoreCase(tableName))
-					continue;
-				CurdData curdData = createCurdData(table);
-				curdData.packageName = basePackage;
-				curdData.packagePath = basePackage.replaceAll("[.]", "/");
-				curdData.moduleName = moduleName;
-				curdData.databaseName = databaseName;
-				curdData.classDescList.add(url);
-				curdData.classDescList.add(user);
-				curdData.classDescList.add(pwd);
-				curdData.classDescList.add("代码自动生成!数据库的资源文件.");
-				GenEntity.gen(curdData);
-				GenDao.gen(curdData);
-				GenController.gen(curdData);
-				GenService.gen(curdData);
-				GenMybatisXml.gen(curdData);
-				GenView.gen(curdData);
-				GenWebDto.gen(curdData);
+				if(build.tableNameSet.contains(table.getName()))
+				genOneTable(build, table);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * 根据模板生成java文件。entity，dao，service，web。mapper.xml;
+	 * 
 	 * @param url
 	 * @param user
 	 * @param pwd
 	 * @param tableName
 	 */
-	public static void generateAllDbEntityByTableNameUseFreemarker(String basePackage,
-			String moduleName,
-			String url,
-			String user,
-			String pwd,
-			String databaseName) {
+	public static void generateAllDbEntityByTableNameUseFreemarker(Builder build) {
 		Db db;
-		if (url.contains("mysql")) {
+		if (build.url.contains("mysql")) {
 			db = new MysqlHelper();
 		} else
 			db = new OracleHelper();
 		List<DBTable> tableDetail = null;
 		try {
-			tableDetail = db.getTableDetail(url, user, pwd);
+			tableDetail = db.getTableDetail(build.url, build.user, build.pwd);
 			for (DBTable table : tableDetail) {
-				CurdData curdData = createCurdData(table);
-				curdData.packageName = basePackage;
-				curdData.packagePath = basePackage.replaceAll("[.]", "/");
-				curdData.moduleName = moduleName;
-				curdData.databaseName = databaseName;
-				curdData.classDescList.add(url);
-				curdData.classDescList.add(user);
-				curdData.classDescList.add(pwd);
-				curdData.classDescList.add("代码自动生成!数据库的资源文件.");
-				GenEntity.gen(curdData);
-				if(curdData.table.keyFields.size() == 1){
-					GenDao.gen(curdData);
-					GenController.gen(curdData);
-					GenService.gen(curdData);
-					GenMybatisXml.gen(curdData);
-					GenView.gen(curdData);
-					GenWebDto.gen(curdData);
-				}
+				genOneTable(build, table);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private static void genOneTable(Builder build, DBTable table) throws Exception {
+		CurdData curdData = createCurdData(table);
+		curdData.packageName = build.basePackage;
+		curdData.packagePath = build.basePackage.replaceAll("[.]", "/");
+		curdData.moduleName = build.moduleName;
+		curdData.databaseName = build.databaseName;
+		curdData.classDescList.add(build.url);
+		curdData.classDescList.add(build.user);
+		curdData.classDescList.add(build.pwd);
+		curdData.classDescList.add("代码自动生成!数据库的资源文件.");
+		GenEntity.gen(curdData);
+		if (curdData.table.keyFields.size() == 1) {
+			GenDao.gen(curdData);
+			GenController.gen(curdData);
+			GenService.gen(curdData);
+			GenMybatisXml.gen(curdData);
+			GenView.gen(curdData);
+			GenWebDto.gen(curdData);
 		}
 	}
 
@@ -797,16 +805,14 @@ public class DeveloperUtils {
 		return curdData;
 	}
 
-	private static Set<String> findProjectSrcPath(String classPath,
-			String projectPath) {
+	private static Set<String> findProjectSrcPath(String classPath, String projectPath) {
 		Set<String> path = new HashSet<>(0);
 		try {
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='src']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='src']",
+					"path");
 			for (String string : nodeAttrValues) {
 				if (string.startsWith("/")) {
-					path.addAll(findProjectSrcPath(workSpacePath + string
-							+ "/.classpath", workSpacePath + string));
+					path.addAll(findProjectSrcPath(workSpacePath + string + "/.classpath", workSpacePath + string));
 				} else {
 					path.add(projectPath + "/" + string + "/");
 				}
@@ -820,12 +826,11 @@ public class DeveloperUtils {
 	private static Set<String> findProjectSrcPath(String classPath) {
 		Set<String> path = new HashSet<>(0);
 		try {
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='src']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='src']",
+					"path");
 			for (String string : nodeAttrValues) {
 				if (string.startsWith("/")) {
-					path.addAll(findProjectSrcPath(workSpacePath + string
-							+ "/.classpath", workSpacePath + string));
+					path.addAll(findProjectSrcPath(workSpacePath + string + "/.classpath", workSpacePath + string));
 				} else {
 					path.add(projectPath + "/" + string + "/");
 				}
@@ -839,18 +844,18 @@ public class DeveloperUtils {
 	/**
 	 * 
 	 * @param classPath
-	 * @param recursion 递归
+	 * @param recursion
+	 *            递归
 	 * @return
 	 */
 	private static Set<String> findProjectSrcPath(String projectPath, String classPath, boolean recursion) {
 		Set<String> path = new HashSet<>(0);
 		try {
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='src']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='src']",
+					"path");
 			for (String srcpath : nodeAttrValues) {
 				if (srcpath.startsWith("/") && recursion) {
-					path.addAll(findProjectSrcPath(workSpacePath + srcpath
-							+ "/.classpath", workSpacePath + srcpath));
+					path.addAll(findProjectSrcPath(workSpacePath + srcpath + "/.classpath", workSpacePath + srcpath));
 				}
 				if (!srcpath.startsWith("/")) {
 					path.add(projectPath + "/" + srcpath + "/");
@@ -862,8 +867,7 @@ public class DeveloperUtils {
 		return path;
 	}
 
-	public static List<String> findProjectOutputPath(Class<?>... clazz)
-			throws Exception {
+	public static List<String> findProjectOutputPath(Class<?>... clazz) throws Exception {
 		System.out.println(Thread.currentThread().getStackTrace()[1]);
 		Set<String> findProjectOutputPath = findProjectOutputPath();
 		System.out.println(findProjectOutputPath);
@@ -907,14 +911,12 @@ public class DeveloperUtils {
 	private static Set<String> findProjectOutputPath(String classPath) {
 		Set<String> path = new HashSet<>(0);
 		try {
-			List<String> output = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='output']", "path");
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='src']", "path");
+			List<String> output = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='output']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='src']",
+					"path");
 			for (String string : nodeAttrValues) {
 				if (string.startsWith("/")) {
-					path.addAll(findProjectOutputPath(workSpacePath + string
-							+ "/.classpath", workSpacePath + string));
+					path.addAll(findProjectOutputPath(workSpacePath + string + "/.classpath", workSpacePath + string));
 				}
 			}
 			for (String string : output) {
@@ -928,16 +930,15 @@ public class DeveloperUtils {
 	}
 
 	/**
-	 * 获取项目的class文件输出路径
-	 * 不递归
+	 * 获取项目的class文件输出路径 不递归
+	 * 
 	 * @param classPath
 	 * @return
 	 */
 	public static String findProjectOutputPathByName(String projectName) {
 		String classPath = workSpacePath + File.separator + projectName + File.separator + ".classpath";
 		try {
-			List<String> output = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='output']", "path");
+			List<String> output = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='output']", "path");
 			for (String string : output) {
 				return workSpacePath + File.separator + projectName + "/" + string + "/";
 			}
@@ -949,15 +950,14 @@ public class DeveloperUtils {
 	}
 
 	/**
-	 * 获取项目的class文件输出路径
-	 * 不递归
+	 * 获取项目的class文件输出路径 不递归
+	 * 
 	 * @param classPath
 	 * @return
 	 */
 	private static String findProjectOutputPathByName(String projectPath, String classPath) {
 		try {
-			List<String> output = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='output']", "path");
+			List<String> output = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='output']", "path");
 			for (String string : output) {
 				return projectPath + "/" + string;
 			}
@@ -976,13 +976,12 @@ public class DeveloperUtils {
 	public static List<String> findAssociateProjectName(String classPath) {
 		List<String> path = new ArrayList<String>(0);
 		try {
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='src']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='src']",
+					"path");
 			for (String projectName : nodeAttrValues) {
 				if (projectName.startsWith("/")) {
 					path.add(projectName.substring(1));
-					path.addAll(findAssociateProjectName(workSpacePath + projectName
-							+ "/.classpath"));
+					path.addAll(findAssociateProjectName(workSpacePath + projectName + "/.classpath"));
 				}
 			}
 		} catch (Exception e) {
@@ -994,8 +993,8 @@ public class DeveloperUtils {
 	public static List<String> findProjectLibPathByName(String projectPath, String classPath) {
 		List<String> libPath = new ArrayList<String>(0);
 		try {
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='lib']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='lib']",
+					"path");
 			for (String path : nodeAttrValues) {
 				libPath.add(projectPath + File.separator + path);
 			}
@@ -1012,18 +1011,15 @@ public class DeveloperUtils {
 	 * @param projectPath
 	 * @return
 	 */
-	private static Set<String> findProjectOutputPath(String classPath,
-			String projectPath) {
+	private static Set<String> findProjectOutputPath(String classPath, String projectPath) {
 		Set<String> path = new HashSet<String>(0);
 		try {
-			List<String> output = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='output']", "path");
-			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath,
-					"//classpathentry[@kind='src']", "path");
+			List<String> output = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='output']", "path");
+			List<String> nodeAttrValues = XmlUtils.getNodeAttrValues(classPath, "//classpathentry[@kind='src']",
+					"path");
 			for (String string : nodeAttrValues) {
 				if (string.startsWith("/")) {
-					path.addAll(findProjectOutputPath(workSpacePath + string
-							+ "/.classpath", workSpacePath + string));
+					path.addAll(findProjectOutputPath(workSpacePath + string + "/.classpath", workSpacePath + string));
 				}
 			}
 			for (String string : output) {
@@ -1099,6 +1095,7 @@ public class DeveloperUtils {
 
 	/**
 	 * 获取一个项目的src路径
+	 * 
 	 * @param projectName
 	 * @return
 	 */
@@ -1110,6 +1107,7 @@ public class DeveloperUtils {
 
 	/**
 	 * 获取一个项目的src路径
+	 * 
 	 * @param projectName
 	 * @return
 	 */
