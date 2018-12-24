@@ -37,12 +37,6 @@
             <artifactId>harry12800.tree2word</artifactId>
             <version>1.0</version>
         </dependency>
-      <!--   <dependency>
-            <groupId>cn.harry12800</groupId>
-            <artifactId>harry12800.dbhelper</artifactId>
-            <version>1.0</version>
-        </dependency> -->
-        <!--freemarker-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>

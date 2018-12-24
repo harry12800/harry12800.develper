@@ -65,7 +65,21 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		return r;
 	}
-
+	<#list table.keyFields as c>
+ 	/**
+	 * 查找一行数据
+	 * @param id
+	 * @return
+	 */
+	${ClassName} findBy${c.javaFieldName}(${c.javaType} ${c.javaName});
+	
+	/**
+	 * 删除单行数据 ${c.comments}
+	 * @param id
+	 * @return
+	 */
+ 	int deleteBy${c.javaFieldName}(${c.javaType} ${c.javaName});
+	</#list>
 	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "删除", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity delete(@ApiParam @RequestBody ${ClassName} ${className},
