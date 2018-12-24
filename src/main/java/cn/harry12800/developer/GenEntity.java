@@ -25,10 +25,22 @@ public class GenEntity {
 	public static void gen(CurdData curdData) throws Exception {
 
 		Configuration cfg = Configuration.getDefaultConfiguration();
-		if (jarOrFile)
-			cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd");
-		else {
-			cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd"));
+		if (jarOrFile) {
+			if(curdData.table.keyFields.size()==0)
+				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd");
+			else if(curdData.table.keyFields.size()==1){
+				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd/onekey");
+			}else {
+				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd/manykey");
+			}
+		} else {
+			if(curdData.table.keyFields.size()==0)
+				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd"));
+			else if(curdData.table.keyFields.size()==1){
+				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd/onekey"));
+			}else{
+				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd/manykey"));
+			}
 		}
 		Template t1 = cfg.getTemplate(ftl);
 		StringWriter out = new StringWriter();
@@ -47,7 +59,7 @@ public class GenEntity {
 		XmlTemplate template = new XmlTemplate();
 		Field[] f = XmlTemplate.class.getDeclaredFields();
 		for (int i = 0; i < length; i++) {
-//			System.out.println(childNodes.item(i).getTextContent());
+			// System.out.println(childNodes.item(i).getTextContent());
 			for (Field field : f) {
 				if (field.getName().equals(childNodes.item(i).getNodeName())) {
 					field.setAccessible(true);
@@ -55,9 +67,10 @@ public class GenEntity {
 				}
 			}
 		}
-//		System.out.println(template);
+		// System.out.println(template);
 		FileUtils.createFile(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName);
-		FileUtils.writeContent(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName, template.content);
+		FileUtils.writeContent(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName,
+				template.content);
 		System.out.println(DeveloperUtils.projectPath + File.separator + template.filePath + template.fileName);
 	}
 }

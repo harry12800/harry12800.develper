@@ -25,10 +25,22 @@ public class GenMybatisXml {
 	public static void gen(CurdData curdData) throws Exception {
 
 		Configuration cfg = Configuration.getDefaultConfiguration();
-		if (jarOrFile)
-			cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd");
-		else {
-			cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd"));
+		if (jarOrFile) {
+			if(curdData.table.keyFields.size()==0)
+				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd");
+			else if(curdData.table.keyFields.size()==1){
+				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd/onekey");
+			}else {
+				cfg.setClassForTemplateLoading(GenEntity.class, "/template/gen/curd/manykey");
+			}
+		} else {
+			if(curdData.table.keyFields.size()==0)
+				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd"));
+			else if(curdData.table.keyFields.size()==1){
+				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd/onekey"));
+			}else{
+				cfg.setDirectoryForTemplateLoading(new File("src/main/resources/template/gen/curd/manykey"));
+			}
 		}
 		Template t1 = cfg.getTemplate(ftl);
 		StringWriter out = new StringWriter();

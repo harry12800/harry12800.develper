@@ -738,8 +738,8 @@ public class DeveloperUtils {
 		try {
 			tableDetail = db.getTableDetail(build.url, build.user, build.pwd);
 			for (DBTable table : tableDetail) {
-				if(build.tableNameSet.contains(table.getName()))
-				genOneTable(build, table);
+				if (build.tableNameSet.contains(table.getName()))
+					genOneTable(build, table);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -781,15 +781,13 @@ public class DeveloperUtils {
 		curdData.classDescList.add(build.user);
 		curdData.classDescList.add(build.pwd);
 		curdData.classDescList.add("代码自动生成!数据库的资源文件.");
-		GenEntity.gen(curdData);
-		if (curdData.table.keyFields.size() == 1) {
-			GenDao.gen(curdData);
-			GenController.gen(curdData);
-			GenService.gen(curdData);
-			GenMybatisXml.gen(curdData);
-			GenView.gen(curdData);
-			GenWebDto.gen(curdData);
-		}
+		if(build.needEntity)GenEntity.gen(curdData);
+		if(build.needMapper)GenDao.gen(curdData);
+		if(build.needController)GenController.gen(curdData);
+		if(build.needService)GenService.gen(curdData);
+		if(build.needMapperxml)GenMybatisXml.gen(curdData);
+		if(build.needJ2seview)GenView.gen(curdData);
+		if(build.needController)GenWebDto.gen(curdData);
 	}
 
 	private static CurdData createCurdData(DBTable table) {
