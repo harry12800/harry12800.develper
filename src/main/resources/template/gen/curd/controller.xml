@@ -71,25 +71,41 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	 * @param id
 	 * @return
 	 */
-	${ClassName} findBy${c.javaFieldName}(${c.javaType} ${c.javaName});
-	
-	/**
-	 * 删除单行数据 ${c.comments}
-	 * @param id
-	 * @return
-	 */
- 	int deleteBy${c.javaFieldName}(${c.javaType} ${c.javaName});
-	</#list>
-	@RequestMapping(value = "/delete", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-	@ApiOperation(httpMethod = "POST", value = "删除", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity delete(@ApiParam @RequestBody ${ClassName} ${className},
+	@RequestMapping(value = "/findBy${c.javaFieldName}", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity findBy${c.javaFieldName}(@ApiParam @RequestBody ${ClassName} ${className},
 			HttpServletRequest request) {
 		if (StringUtils.isEmpty("")) {
 			return ResponseEntity.newBadRequest();
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			int save = mapper.deleteById(<#list table.keyFields as c><#if c_has_next>${className}.get${c.javaFieldName}(),</#if><#if !c_has_next>${className}.get${c.javaFieldName}()</#if></#list>);
+			${ClassName} findById = mapper.findBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
+			r.setContent(new Object() {
+				public ${ClassName} ${className} = findById;
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+			r.setCode(30);
+			r.setMessage(e.getMessage());
+		}
+		return r;
+	}
+	/**
+	 * 删除单行数据 ${c.comments}
+	 * @param id
+	 * @return
+	 */
+ 	@RequestMapping(value = "/deleteBy${c.javaFieldName}", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
+	@ApiOperation(httpMethod = "POST", value = "删除", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity deleteBy${c.javaFieldName}(@ApiParam @RequestBody ${ClassName} ${className},
+			HttpServletRequest request) {
+		if (StringUtils.isEmpty("")) {
+			return ResponseEntity.newBadRequest();
+		}
+		ResponseEntity r = ResponseEntity.newOk();
+		try {
+			int save = mapper.deleteBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
 			r.setContent(new Object() {
 				public int result = save;
 			});
@@ -100,7 +116,9 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		return r;
 	}
-
+ 	
+	</#list>
+	
 	@RequestMapping(value = "/update", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "修改", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity update(@ApiParam @RequestBody ${ClassName} ${className},
@@ -113,27 +131,6 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 			int save = mapper.update(${className});
 			r.setContent(new Object() {
 				public int result = save;
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-			r.setCode(30);
-			r.setMessage(e.getMessage());
-		}
-		return r;
-	}
-
-	@RequestMapping(value = "/findById", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
-	@ApiOperation(httpMethod = "POST", value = "通过主键查找", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity findById(@ApiParam @RequestBody ${ClassName} ${className},
-			HttpServletRequest request) {
-		if (StringUtils.isEmpty("")) {
-			return ResponseEntity.newBadRequest();
-		}
-		ResponseEntity r = ResponseEntity.newOk();
-		try {
-			${ClassName} findById = mapper.findById(<#list table.keyFields as c><#if c_has_next>${className}.get${c.javaFieldName}(),</#if><#if !c_has_next>${className}.get${c.javaFieldName}()</#if></#list>);
-			r.setContent(new Object() {
-				public ${ClassName} ${className} = findById;
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
