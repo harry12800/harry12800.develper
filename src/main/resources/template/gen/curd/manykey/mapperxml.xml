@@ -32,14 +32,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM ${databaseName}.${table.dbName} 
 		WHERE ${c1.dbName} = ${"#"}{value}
 	</select>
-	</#list>	
-	<select id='findByIds' parameterType='java.util.Set'>
+	<select id='findBy${c1.javaFieldName}s' parameterType='java.util.Set'>
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM ${databaseName}.${table.dbName} WHERE  
 		<choose>
 			<when test='ids !=null and ids.size()>0'>
-				<#list table.keyFields as c> ${c.dbName} </#list> IN 
+				${c1.dbName} IN 
 				<foreach item = 'id' index='index' collection='ids' open='(' separator=',' close=')'>
 					${"#"}{id}
 				</foreach>
@@ -49,6 +48,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</otherwise>
 		</choose>
 	</select>
+	</#list>	
+	
 	<insert id='save' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		INSERT INTO ${databaseName}.${table.dbName}(
 		<#list table.allFields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list>)
@@ -60,7 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<#list table.fields as c>
 		 <#if c_has_next>${c.dbName}=${"#"}{${c.javaName}},</#if>
 		 <#if !c_has_next>${c.dbName}=${"#"}{${c.javaName}}</#if></#list>
-		 WHERE id=${"#"}{id}
+		 WHERE <#list table.keyFields as c><#if c_has_next>${c.dbName}= ${"#"}{${c.javaName}} AND </#if><#if !c_has_next>${c.dbName}= ${"#"}{${c.javaName}}</#if></#list>
 	</update>
 	<update id='updateNotNull' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		UPDATE ${databaseName}.${table.dbName} 
@@ -86,11 +87,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	</#list>
 	<!-- ${"#"}{value} -->
-	<delete id='deleteByIds' parameterType='java.util.Set'>
+	<#list table.keyFields as c1>
+	<delete id='deleteBy${c1.javaFieldName}s' parameterType='java.util.Set'>
 		DELETE FROM ${databaseName}.${table.dbName} WHERE  
 		<choose>
 			<when test='ids !=null and ids.size()>0'>
-				<#list table.keyFields as c> ${c.dbName} </#list> IN 
+				${c1.dbName} IN 
 				<foreach item = 'id' index='index' collection='ids' open='(' separator=',' close=')'>
 					${"#"}{id}
 				</foreach>
@@ -100,8 +102,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			</otherwise>
 		</choose>
 	</delete>
-	
-	
+	</#list>
 	<resultMap type='${packageName}.${moduleName}.entity.${ClassName}' id='${ClassName}'>
 		<#list table.keyFields as c> 
 			<result property='${c.javaName}' column='${c.dbName}'/>
