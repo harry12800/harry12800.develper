@@ -60,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<#list table.fields as c>
 		 <#if c_has_next>${c.dbName}=${"#"}{${c.javaName}},</#if>
 		 <#if !c_has_next>${c.dbName}=${"#"}{${c.javaName}}</#if></#list>
-		 WHERE id=${"#"}{id}
+		 WHERE <#list table.keyFields as c1>${c.dbName}=${"#"}{${c.javaName}}</#list>
 	</update>
 	<update id='updateNotNull' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		UPDATE ${databaseName}.${table.dbName} 
