@@ -17,12 +17,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		FROM ${databaseName}.${table.dbName}
 	</select>
 	<select id='countAll' resultType='java.lang.Long' >
-		SELECT count(*) FROM ${databaseName}.${table.dbName}
+		SELECT count(1) FROM ${databaseName}.${table.dbName}
 	</select>
 	<select id='pageList' resultMap='${ClassName}' >
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM ${databaseName}.${table.dbName} limit ${"#"}{index},${"#"}{pageSize}
+	</select>
+	<select id='findById' resultMap='${ClassName}' >
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM ${databaseName}.${table.dbName} 
+		WHERE <#list table.keyFields as c><#if c_has_next>${c.dbName}= ${"#"}{${c.javaName}} AND </#if><#if !c_has_next>${c.dbName}= ${"#"}{${c.javaName}}</#if></#list>
+	</select>
+	<select id='exist' resultType='java.lang.Integer' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
+		SELECT COUNT(1)
+		FROM ${databaseName}.${table.dbName} 
+		WHERE <#list table.keyFields as c><#if c_has_next>${c.dbName}= ${"#"}{${c.javaName}} AND </#if><#if !c_has_next>${c.dbName}= ${"#"}{${c.javaName}}</#if></#list>
 	</select>
 	
 	<#list table.keyFields as c1>

@@ -33,6 +33,16 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	public List<${ClassName}> findAll() {
 		return mapper.findAll();
 	}
+	/**
+	* 新增或者更新
+	*/
+	public int saveOrUpdate(${ClassName} t) {
+		if(mapper.exist(t)>0){
+			return mapper.updateNotNull(t);
+		} else {
+			return mapper.save(t);
+		}
+	}
 	<#list table.keyFields as c>
 	
 	public List<${ClassName}> findBy${c.javaFieldName}s(Set<?> set){

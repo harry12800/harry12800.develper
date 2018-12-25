@@ -34,6 +34,22 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	public List<${ClassName}> findAll() {
 		return mapper.findAll();
 	}
+	/**
+	* 查询单行数据
+	*/
+	${ClassName} findById(<#list table.keyFields as c><#if c_has_next>${c.javaType} ${c.javaName},</#if><#if !c_has_next>${c.javaType} ${c.javaName}</#if></#list>) {
+		return mapper.findById(<#list table.keyFields as c><#if c_has_next>${c.javaName},</#if><#if !c_has_next>${c.javaName}</#if></#list>);
+	}
+	/**
+	* 新增或者更新
+	*/
+	public int saveOrUpdate(${ClassName} t) {
+		if(mapper.exist(t)>0){
+			return mapper.updateNotNull(t);
+		} else {
+			return mapper.save(t);
+		}
+	}
 	<#list table.keyFields as c>
 	
 	public List<${ClassName}> findBy${c.javaFieldName}s(Set<?> set){

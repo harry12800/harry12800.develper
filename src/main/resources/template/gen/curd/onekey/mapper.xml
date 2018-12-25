@@ -53,6 +53,10 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	List<${ClassName}> findBy${c.javaFieldName}s(@Param("ids")Set<?> ids);
 	</#list>
 	/**
+	* 是否存在，存在>0
+	*/
+	int exist(${ClassName} t);
+	/**
 	* 保存数据
 	*/
 	int save(${ClassName} t);

@@ -51,12 +51,20 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	* 查询多行数据
 	**/
 	List<${ClassName}> findBy${c.javaFieldName}s(@Param("ids")Set<?> ids);
-	</#list>	
+	</#list>
+	/**
+	* 查询单行数据
+	*/
+	${ClassName} findById(<#list table.keyFields as c><#if c_has_next>@Param("${c.javaName}")${c.javaType} ${c.javaName},</#if><#if !c_has_next>@Param("${c.javaName}")${c.javaType} ${c.javaName}</#if></#list>);
+	
 	/**
 	* 保存数据
 	*/
 	int save(${ClassName} t);
-
+	/**
+	* 是否存在，存在>0
+	*/
+	int exist(${ClassName} t);
 	/**
 	* 更新数据，通过id 修改所有字段属性
 	*/
