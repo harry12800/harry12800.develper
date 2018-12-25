@@ -85,7 +85,7 @@ public class ${ClassName} { // extends DataEntity<${ClassName}> {
  	}
 	</#list>
 	public String toString() {
-		return "${ClassName} ["+<#list table.fields as c>"${c.javaName}="${c.javaName}+"," </#list>+"]";
+		return "${ClassName} ["<#list table.fields as c>+"${c.javaName}="+${c.javaName}+","</#list>+"]";
 	}
 }]]>
 	</content>

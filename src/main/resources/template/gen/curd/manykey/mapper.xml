@@ -65,7 +65,14 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	* 更新数据，通过id 修改非空字段属性
 	*/
 	int updateNotNull(${ClassName} t);
-	
+	/**
+	* 统计条数
+	*/
+	long countAll();
+	/**
+	*分页
+	*/
+	List<${ClassName}> pageList(@Param("index") int index,@Param("pageSize") int pageSize);
 	/**
 	* 通过多个id删除多行数据
 	* 字符串ids的样子 eg:  `id in ('a','b')`  数字型的是  `id in (a,b)`

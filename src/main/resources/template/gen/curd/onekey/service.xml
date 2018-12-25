@@ -48,7 +48,14 @@ public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${C
 	public int deleteByIds(Set<?> set){
 		return mapper.deleteByIds(set);
 	}
-	 
+	public long countAll() {
+		return mapper.countAll();
+	}
+
+	public List<${ClassName}> pageList(int pageIndex, int pageSize) {
+		int index = (pageIndex -1)*pageSize;
+		return mapper.pageList(index,pageSize);
+	}
 }]]>
 	</content>
 </template>
