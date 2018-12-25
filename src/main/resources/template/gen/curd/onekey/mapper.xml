@@ -46,12 +46,12 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	 * @return
 	 */
  	int deleteBy${c.javaFieldName}(${c.javaType} ${c.javaName});
-	</#list>	
 	
 	/**
 	* 查询多行数据
 	**/
-	List<${ClassName}> findByIds(@Param("ids")Set<?> ids);
+	List<${ClassName}> findBy${c.javaFieldName}s(@Param("ids")Set<?> ids);
+	</#list>
 	/**
 	* 保存数据
 	*/

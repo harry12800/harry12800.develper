@@ -621,6 +621,11 @@ public class DeveloperUtils {
 		boolean needService = true;
 		boolean needJ2seview = false;
 		boolean needController = true;
+ 
+		public Builder setAllTable(boolean isAllTable) {
+			this.isAllTable = isAllTable;
+			return this;
+		}
 
 		public Builder setBasePackage(String basePackage) {
 			this.basePackage = basePackage;
