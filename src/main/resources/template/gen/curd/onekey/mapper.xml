@@ -42,7 +42,7 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	
 	/**
 	 * 删除单行数据 ${c.comments}
-	 * @param id
+	 * @param ${c.javaName}
 	 * @return
 	 */
  	int deleteBy${c.javaFieldName}(${c.javaType} ${c.javaName});
@@ -79,7 +79,6 @@ public interface ${ClassName}Mapper { //extends CrudDao<${ClassName}> {
 	List<${ClassName}> pageList(@Param("index") int index,@Param("pageSize") int pageSize);
 	/**
 	* 通过多个id删除多行数据
-	* 字符串ids的样子 eg:  `id in ('a','b')`  数字型的是  `id in (a,b)`
 	*/
 	int deleteByIds(@Param("ids")Set<?> ids);
 }]]>

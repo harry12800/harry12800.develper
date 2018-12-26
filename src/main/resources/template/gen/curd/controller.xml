@@ -68,7 +68,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	<#list table.keyFields as c>
  	/**
 	 * 查找一行数据
-	 * @param id
+	 * @param ${className}
 	 * @return
 	 */
 	@RequestMapping(value = "/findBy${c.javaFieldName}", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
@@ -93,7 +93,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	}
 	/**
 	 * 删除单行数据 ${c.comments}
-	 * @param id
+	 * @param ${className}
 	 * @return
 	 */
  	@RequestMapping(value = "/deleteBy${c.javaFieldName}", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")

@@ -83,14 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 	</if>
 		 	</#list>
 		 </trim>
-		 WHERE 
-		<trim prefix="" suffixOverrides=" AND ">
-		<#list table.keyFields as c1>
-			<if test='1 == 1'>
-				${c1.dbName}=${"#"}{${c1.javaName}}
-			</if>
-		 </#list>
-		</trim>
+		 WHERE <#list table.keyFields as c><#if c_has_next>${c.dbName}= ${"#"}{${c.javaName}} AND </#if><#if !c_has_next>${c.dbName}= ${"#"}{${c.javaName}}</#if></#list>
 	</update>
 	<#list table.keyFields as c1>
 	<delete id='deleteBy${c1.javaFieldName}' parameterType='${c1.javaCompleteType}'>
