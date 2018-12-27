@@ -70,10 +70,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<update id='updateNotNull' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		UPDATE ${databaseName}.${table.dbName} 
 		<trim prefix="SET" suffixOverrides=",">
-		<#list table.fields as c>
-		 	<if test='null != ${c.javaName}'>
-		 		${c.dbName}=${"#"}{${c.javaName}},
-		 	</if>
+		<#list table.updateFields as c>
+		 	<if test='null != ${c.javaName}'>${c.dbName}=${"#"}{${c.javaName}},</if>
 		 	</#list>
 		 </trim>
 		 WHERE 

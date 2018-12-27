@@ -16,6 +16,7 @@ public class Table {
 	private String createOracleSql;
 	private String tbDesc;
 	LinkedHashSet<Field> fields = new LinkedHashSet<Field>();
+	LinkedHashSet<Field> updateFields = new LinkedHashSet<Field>();
 	LinkedHashSet<Field> keyFields = new LinkedHashSet<Field>();
 	LinkedHashSet<Field> allFields = new LinkedHashSet<Field>();
 
@@ -39,8 +40,13 @@ public class Table {
 			if(field.getIsKey()){
 				this.keyFields.add(field);
 			}
-			else{
+			else {
 				this.fields.add(field);
+				if(!(field.getDbName().equalsIgnoreCase("ctime")
+						||field.getDbName().equalsIgnoreCase("createtime")
+						||field.getDbName().equalsIgnoreCase("create_time")
+						||field.getDbName().equalsIgnoreCase("c_time")))
+				this.updateFields.add(field);
 			}
 			this.allFields.add(field);
 		}
@@ -156,6 +162,14 @@ public class Table {
 	 */
 	public void setCreateOracleSql(String createOracleSql) {
 		this.createOracleSql = createOracleSql;
+	}
+
+	public LinkedHashSet<Field> getUpdateFields() {
+		return updateFields;
+	}
+
+	public void setUpdateFields(LinkedHashSet<Field> updateFields) {
+		this.updateFields = updateFields;
 	}
 
 }
