@@ -28,48 +28,48 @@ import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleN
 public class ${ClassName}Service {// extends CrudService<${ClassName}Mapper, ${ClassName}> {
 
 	@Autowired
-	${ClassName}Mapper mapper;
+	${ClassName}Mapper ${className}Mapper;
 	
 	public List<${ClassName}> findAll() {
-		return mapper.findAll();
+		return ${className}Mapper.findAll();
 	}
 	/**
 	* 新增或者更新
 	*/
 	public int saveOrUpdate(${ClassName} t) {
-		if(mapper.exist(t)>0){
-			return mapper.updateNotNull(t);
+		if(${className}Mapper.exist(t)>0){
+			return ${className}Mapper.updateNotNull(t);
 		} else {
-			return mapper.save(t);
+			return ${className}Mapper.save(t);
 		}
 	}
 	<#list table.keyFields as c>
 	
 	public List<${ClassName}> findBy${c.javaFieldName}s(Set<?> set){
-		return mapper.findBy${c.javaFieldName}s(set);
+		return ${className}Mapper.findBy${c.javaFieldName}s(set);
 	}
 	
 	public ${ClassName} findBy${c.javaFieldName}(${c.javaType} ${c.javaName}){
-		return mapper.findBy${c.javaFieldName}(${c.javaName});
+		return ${className}Mapper.findBy${c.javaFieldName}(${c.javaName});
 	}
 	</#list>
 	public int save(${ClassName} t){
-		return mapper.save(t);
+		return ${className}Mapper.save(t);
 	}
 	public int update(${ClassName} t){
-		return mapper.update(t);
+		return ${className}Mapper.update(t);
 	}
 	 
 	public int deleteByIds(Set<?> set){
-		return mapper.deleteByIds(set);
+		return ${className}Mapper.deleteByIds(set);
 	}
 	public long countAll() {
-		return mapper.countAll();
+		return ${className}Mapper.countAll();
 	}
 
 	public List<${ClassName}> pageList(int pageIndex, int pageSize) {
 		int index = (pageIndex -1)*pageSize;
-		return mapper.pageList(index,pageSize);
+		return ${className}Mapper.pageList(index,pageSize);
 	}
 }]]>
 	</content>

@@ -28,6 +28,7 @@ import io.swagger.annotations.ApiParam;
 
 import ${packageName}.${moduleName}.entity<#if subModuleName != "">.${subModuleName}</#if>.${ClassName};
 import ${packageName}.${moduleName}.mapper<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Mapper;
+import ${packageName}.${moduleName}.service<#if subModuleName != "">.${subModuleName}</#if>.${ClassName}Service;
 
 /**
  * ${functionName}Controller
@@ -43,8 +44,10 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 	private static final String API_TAGS = "${dbDesc}/${ClassName}Controller";
 
 	@Autowired
-	${ClassName}Mapper mapper;
-
+	${ClassName}Mapper ${className}Mapper;
+	@Autowired
+	${ClassName}Service ${className}Service;
+	
 	@RequestMapping(value = "/add", method = RequestMethod.POST, headers = "content-type=application/x-www-form-urlencoded")
 	@ApiOperation(httpMethod = "POST", value = "添加", tags = { API_TAGS }, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity add(@ApiParam @RequestBody ${ClassName} ${className},
@@ -54,7 +57,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			int save = mapper.save(${className});
+			int save = ${className}Mapper.save(${className});
 			r.setContent(new Object() {
 				public int result = save;
 			});
@@ -80,7 +83,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			${ClassName} findById = mapper.findBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
+			${ClassName} findById = ${className}Mapper.findBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
 			r.setContent(new Object() {
 				public ${ClassName} ${className} = findById;
 			});
@@ -105,7 +108,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			int save = mapper.deleteBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
+			int save = ${className}Mapper.deleteBy${c.javaFieldName}(${className}.get${c.javaFieldName}());
 			r.setContent(new Object() {
 				public int result = save;
 			});
@@ -128,7 +131,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			int save = mapper.update(${className});
+			int save = ${className}Mapper.update(${className});
 			r.setContent(new Object() {
 				public int result = save;
 			});
@@ -149,7 +152,7 @@ public class ${ClassName}Controller {// extends CrudService<${ClassName}Mapper, 
 		}
 		ResponseEntity r = ResponseEntity.newOk();
 		try {
-			List<${ClassName}> findAll = mapper.findAll();
+			List<${ClassName}> findAll = ${className}Mapper.findAll();
 			r.setContent(new Object() {
 				public List<${ClassName}> lists = findAll;
 			});

@@ -46,7 +46,7 @@ public class CodeCounter {
 		//    	for (String string : projectSrcPath) {
 		//    		//DeveloperUtils.notifyAddAnnotation(string);
 		//		}
-		codePath("C:/Workspaces");
+		codePath("D:/Workspaces/IM/Server");
 	}
 
 	public static void codePath(String path){
