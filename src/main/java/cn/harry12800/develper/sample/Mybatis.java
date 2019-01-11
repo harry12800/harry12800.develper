@@ -12,4 +12,12 @@ public class Mybatis {
 		DeveloperUtils.createBuilder().setBasePackage("cn.harry12800").setModuleName("db").setDatabaseName("scan")
 				.setUrl(url).setUser(user).setPwd(pwd).setAllTable(false).setTableName("file_server").build();
 	}
+//	ava.lang.NullPointerException
+//	at javax.swing.ImageIcon.<init>(ImageIcon.java:217)
+//	at cn.harry12800.j2se.component.imageview.ImageViewerFrame.initComponents(ImageViewerFrame.java:108)
+//	at cn.harry12800.j2se.component.imageview.ImageViewerFrame.<init>(ImageViewerFrame.java:76)
+//	at cn.harry12800.j2se.component.imageview.ImageViewerFrame.<init>(ImageViewerFrame.java:66)
+//	at cn.harry12800.vchat.adapter.message.MessageAdapter$4$1.onSuccess(MessageAdapter.java:407)
+//	at cn.harry12800.vchat.utils.ImageCache$1.run(ImageCache.java:113)
+//	at java.lang.Thread.run(Thread.java:748)
 }

@@ -6,18 +6,19 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import cn.harry12800.developer.DeveloperUtils;
 import cn.harry12800.tools.FileUtils;
 
-/** 
- * 代码行数统计 
+/**
+ * 代码行数统计
  */
 public class CodeCounter {
 
-	/** 
-	 * 统计项目代码行数 
+	/**
+	 * 统计项目代码行数
 	 */
 	public static void counter(String projectName) {
 
@@ -27,7 +28,7 @@ public class CodeCounter {
 			System.out.println(path);
 			ArrayList<File> al = getFile(new File(path));
 			for (File f : al) {
-				if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件  
+				if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件
 					count(f);
 					System.out.println(f);
 				}
@@ -40,20 +41,25 @@ public class CodeCounter {
 	}
 
 	public static void main(String[] args) throws ClassNotFoundException, IOException {
-//		code("harry12800.j2se");
-		//    	code("gznytm.serial");
-		//    	Set<String> projectSrcPath = DeveloperUtils.getProjectSrcPath("gznytm.serial",false);
-		//    	for (String string : projectSrcPath) {
-		//    		//DeveloperUtils.notifyAddAnnotation(string);
-		//		}
-		codePath("D:/Workspaces/IM/Server");
+		// code("harry12800.j2se");
+		// code("gznytm.serial");
+		// Set<String> projectSrcPath =
+		// DeveloperUtils.getProjectSrcPath("gznytm.serial",false);
+		// for (String string : projectSrcPath) {
+		// //DeveloperUtils.notifyAddAnnotation(string);
+		// }
+		codePath("D:\\Workspaces\\IM\\Server");
 	}
 
-	public static void codePath(String path){
+	public static void codePath(String path) {
+		Set<String> sets = new HashSet<>();
 		ArrayList<File> al = getFile(new File(path));
 		for (File f : al) {
-			if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件  
-				count1(f);
+			if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件
+				if (!sets.contains(f.getName())) {
+					sets.add(f.getName());
+					count1(f);
+				}
 				System.out.println(f);
 			}
 		}
@@ -62,8 +68,9 @@ public class CodeCounter {
 		System.out.println("注释行数：" + commentLines);
 		System.out.println("空白行数：" + blankLines);
 	}
-	/** 
-	 * 代码行数统计 
+
+	/**
+	 * 代码行数统计
 	 */
 	public static void code(String projectName) {
 
@@ -73,7 +80,7 @@ public class CodeCounter {
 			System.out.println("1:" + path);
 			ArrayList<File> al = getFile(new File(path));
 			for (File f : al) {
-				if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件  
+				if (f.getName().matches(".*\\.java$")) { // 匹配java格式的文件
 					count1(f);
 					System.out.println(f);
 				}
@@ -91,10 +98,11 @@ public class CodeCounter {
 	static long blankLines = 0;
 	static ArrayList<File> fileArray = new ArrayList<File>();
 
-	/** 
-	 * 获得目录下的文件和子目录下的文件 
-	 * @param f 
-	 * @return 
+	/**
+	 * 获得目录下的文件和子目录下的文件
+	 * 
+	 * @param f
+	 * @return
 	 */
 	public static ArrayList<File> getFile(File f) {
 		File[] ff = f.listFiles();
@@ -108,9 +116,10 @@ public class CodeCounter {
 
 	}
 
-	/** 
-	 * 统计方法 
-	 * @param f 
+	/**
+	 * 统计方法
+	 * 
+	 * @param f
 	 */
 	private static void count(File f) {
 		BufferedReader br = null;
@@ -119,8 +128,8 @@ public class CodeCounter {
 			br = new BufferedReader(new FileReader(f));
 			String line = "";
 			while ((line = br.readLine()) != null) {
-				line = line.trim(); // 除去注释前的空格  
-				if (line.matches("^[ ]*$")) { // 匹配空行  
+				line = line.trim(); // 除去注释前的空格
+				if (line.matches("^[ ]*$")) { // 匹配空行
 					blankLines++;
 				} else if (line.startsWith("//")) {
 					commentLines++;
@@ -155,9 +164,10 @@ public class CodeCounter {
 		}
 	}
 
-	/** 
-	 * 统计方法 
-	 * @param f 
+	/**
+	 * 统计方法
+	 * 
+	 * @param f
 	 */
 	private static void count1(File f) {
 		BufferedReader br = null;
@@ -168,22 +178,22 @@ public class CodeCounter {
 			String line = "";
 			while ((line = br.readLine()) != null) {
 				String string = line;
-				line = line.trim(); // 除去注释前的空格  
-				if (line.matches("^[ ]*$")) { // 匹配空行  
+				line = line.trim(); // 除去注释前的空格
+				if (line.matches("^[ ]*$")) { // 匹配空行
 					blankLines++;
 				} else if (line.startsWith("//")) {
-					//	sbBuffer.append(string+"\r\n");
+					// sbBuffer.append(string+"\r\n");
 					commentLines++;
 				} else if (line.startsWith("/*") && !line.endsWith("*/")) {
-					//	sbBuffer.append(string+"\r\n");
+					// sbBuffer.append(string+"\r\n");
 					commentLines++;
 					flag = true;
 				} else if (line.startsWith("/*") && line.endsWith("*/")) {
-					//	sbBuffer.append(string+"\r\n");
+					// sbBuffer.append(string+"\r\n");
 					commentLines++;
 				} else if (flag == true) {
 					commentLines++;
-					//   sbBuffer.append(string+"\r\n");
+					// sbBuffer.append(string+"\r\n");
 					if (line.endsWith("*/")) {
 						flag = false;
 					}

@@ -33,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		WHERE ${c1.dbName} = ${"#"}{value}
 	</select>
 	</#list>	
-	<select id='findByIds' parameterType='java.util.Set'>
+	<select id='findByIds' parameterType='java.util.Set'resultMap='${ClassName}'>
 		SELECT
 		<include refid="Base_Column_List" />
 		FROM ${databaseName}.${table.dbName} WHERE  
@@ -55,6 +55,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		VALUES(<#list table.allFields as c><#if c_has_next>${"#"}{${c.javaName}},</#if><#if !c_has_next>${"#"}{${c.javaName}}</#if>
 		</#list>)
 	</insert>
+	 <insert id="batchSave" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        <!--<selectKey resultType="java.lang.Long" keyProperty="rowId" order="AFTER">-->
+            <!--/*nextval('im.t_group_member_row_id_seq'::regclass)*/-->
+            <!--SELECT currval('im.t_group_member_row_id_seq'::regclass) AS rowId-->
+        <!--</selectKey>-->
+        insert into ${databaseName}.${table.dbName}
+        (<#list table.allFields as c><#if c_has_next>${c.dbName},</#if><#if !c_has_next>${c.dbName}</#if></#list>)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+        (
+            <#list table.allFields as c><#if c_has_next>${"#"}{${c.javaName}},</#if><#if !c_has_next>${"#"}{${c.javaName}}</#if>
+		</#list>
+        )
+        </foreach>
+    </insert>
 	<update id='update' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		UPDATE ${databaseName}.${table.dbName} SET
 		<#list table.fields as c>
@@ -62,6 +77,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		 <#if !c_has_next>${c.dbName}=${"#"}{${c.javaName}}</#if></#list>
 		 WHERE id=${"#"}{id}
 	</update>
+	
 	<update id='updateNotNull' parameterType='${packageName}.${moduleName}.entity.${ClassName}'>
 		UPDATE ${databaseName}.${table.dbName} 
 		<trim prefix="SET" suffixOverrides=",">
